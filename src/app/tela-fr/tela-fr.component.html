@@ -1,0 +1,182 @@
+<div class="wrapper">
+  <!-- Sidebar -->
+  <div class="sidebar-wrapper" data-simplebar="true">
+    <div class="sidebar-header d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <div>
+          <img src="app/tela-fr/icon.sms.png" class="logo-icon" alt="logo icon" />
+        </div>
+        <div>
+          <h4 class="logo-text">Sistema GPL</h4>
+        </div>
+      </div>
+      <!-- Setinha de saída -->
+      <div class="toggle-icon ms-auto">
+        <i class="bx bx-arrow-to-left"></i>
+      </div>
+    </div>
+
+    <!-- Menu -->
+    <ul class="metismenu" id="menu">
+      <!-- Página Inicial -->
+      <li>
+        <a routerLink="/" class="d-flex align-items-center">
+          <i class="bx bx-home me-2"></i>
+          <div class="menu-title">Página Inicial</div>
+        </a>
+      </li>
+
+      <li class="menu-label">Acessos</li>
+
+      <!-- Processos (com submenu) -->
+      <li class="has-arrow" [class.open]="isProcessosSubMenuVisible" (click)="toggleProcessosSubMenu()">
+        <a class="d-flex align-items-center" href="javascript:;">
+          <i class="bx bx-file me-2"></i>
+          <div class="menu-title">Processos</div>
+          <i class="bx bx-chevron-down ms-auto"></i>
+        </a>
+        <ul class="metismenu" *ngIf="isProcessosSubMenuVisible">
+          <li>
+            <a routerLink="/tela-fr" class="d-flex align-items-center">
+              <i class="bx bx-right-arrow-alt me-2"></i>
+              Novo Processo
+            </a>
+          </li>
+          <li>
+            <a routerLink="/em-analise" class="d-flex align-items-center">
+              <i class="bx bx-right-arrow-alt me-2"></i>
+              Em Análise
+            </a>
+          </li>
+          <li>
+            <a routerLink="/concluidos" class="d-flex align-items-center">
+              <i class="bx bx-right-arrow-alt me-2"></i>
+              Concluídos
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Fornecedores (com submenu) -->
+      <li class="has-arrow" [class.open]="isFornecedoresSubMenuVisible" (click)="toggleFornecedoresSubMenu()">
+        <a class="d-flex align-items-center" href="javascript:;">
+          <i class="bx bx-group me-2"></i>
+          <div class="menu-title">Fornecedores</div>
+          <i class="bx bx-chevron-down ms-auto"></i>
+        </a>
+        <ul class="metismenu" *ngIf="isFornecedoresSubMenuVisible">
+          <li>
+            <a routerLink="/tela-fr" class="d-flex align-items-center">
+              <i class="bx bx-right-arrow-alt me-2"></i>
+              Cadastrar novo
+            </a>
+          </li>
+          <li>
+            <a routerLink="/ativos-fornecedores" class="d-flex align-items-center">
+              <i class="bx bx-right-arrow-alt me-2"></i>
+              Ativos
+            </a>
+          </li>
+          <li>
+            <a routerLink="/inativos-fornecedores" class="d-flex align-items-center">
+              <i class="bx bx-right-arrow-alt me-2"></i>
+              Inativos
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Usuários -->
+      <li>
+        <a routerLink="/usuarios" class="d-flex align-items-center">
+          <i class="bx bx-lock me-2"></i>
+          <div class="menu-title">Usuários</div>
+        </a>
+      </li>
+
+      <!-- Permissões -->
+      <li>
+        <a routerLink="/permissoes" class="d-flex align-items-center">
+          <i class="bx bx-shield-quarter me-2"></i>
+          <div class="menu-title">Permissões</div>
+        </a>
+      </li>
+
+      <!-- Autorizador -->
+      <li>
+        <a routerLink="/autorizador" class="d-flex align-items-center">
+          <i class="bx bx-check-circle me-2"></i>
+          <div class="menu-title">Autorizador</div>
+        </a>
+      </li>
+
+      <!-- Analista GPL -->
+      <li>
+        <a routerLink="/analista-gpl" class="d-flex align-items-center">
+          <i class="bx bx-user me-2"></i>
+          <div class="menu-title">Analista GPL</div>
+        </a>
+      </li>
+
+      <!-- Tela Multa -->
+      <li>
+        <a routerLink="/tela-multa" class="d-flex align-items-center">
+          <i class="bx bx-user me-2"></i>
+          <div class="menu-title">Tela Multa</div>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Page Content -->
+  <div class="page-wrapper">
+    <div class="page-content">
+      <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+        <div class="breadcrumb-title pe-3">Tela FR</div>
+        <div class="ps-3">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+              <li class="breadcrumb-item"><a routerLink="/"><i class="bx bx-home-alt"></i></a></li>
+              <li class="breadcrumb-item active" aria-current="page">Valor</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Disponibilização de Fundos -->
+      <div class="card radius-10">
+        <div class="card-body">
+          <div class="card radius-10 mb-3">
+            <div class="card-body">
+              <h5 class="mb-3" style="text-decoration: underline;">Disponibilização de Fundos</h5>
+
+              <!-- Data Input -->
+              <div class="mb-3 d-flex justify-content-end">
+                <label for="dateInput" class="form-label me-3" style="font-size: 1.2rem;">Disponibilizado por fonte em:</label>
+                <input type="date" class="form-control" id="dateInput" style="width: 150px; text-align: center; font-weight: bold;" [value]="currentDate" disabled />
+              </div>
+
+              <!-- Formulário -->
+              <form [formGroup]="form">
+                <div class="form-row mb-3 d-flex align-items-center">
+                  <div class="form-group col-md-2 d-flex align-items-center">
+                    <label for="inputUG" style="font-size: 1.2rem;" class="mb-0 me-2">FR</label>
+                    <select class="form-control" id="inputUG" required style="font-size: 1rem;" formControlName="selectedFR" (change)="updateAvailableValue()">
+                      <option value="" disabled selected>Selecione um código</option>
+                      <option *ngFor="let code of frCodes" [value]="code.value">{{ code.label }}</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-3 mb-0 d-flex align-items-center" style="margin-left: 20px;">
+                    <label for="inputValor" class="mb-0 me-1">Valor</label>
+                    <input type="text" class="form-control" name="valor" id="inputValor" placeholder="R$ 00.000,00" formControlName="valor" required />
+                  </div>
+                </div>
+                <button type="button" class="btn btn-primary" (click)="submitForm()">Salvar</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,281 @@
+<div class="container">
+    <!-- Mensagem de erro -->
+    <div *ngIf="formulario.invalid && formulario.touched" class="alert alert-danger">
+      <strong>Atenção!</strong> Por favor, preencha todos os campos obrigatórios.
+    </div>
+
+  <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
+    <!-- UNIDADE GESTORA -->
+    <div class="form-section">
+      <div class="section-title">UNIDADE GESTORA</div>
+      <div class="row">
+        <div class="col-md-4">
+          <label for="inputUG">Código UG</label>
+          <input type="number" class="form-control" formControlName="UG" id="inputUG" placeholder="Código UG" required>
+          <div *ngIf="formulario.get('UG')?.invalid && formulario.get('UG')?.touched" class="text-danger">
+            Código UG é obrigatório.
+          </div>
+        </div>
+        <div class="col-md-8">
+          <label for="inputNomeUG">Nome da U.G</label>
+          <input type="text" class="form-control" formControlName="NomeUnidade" id="inputNomeUG" placeholder="Nome da Unidade" required>
+          <div *ngIf="formulario.get('NomeUnidade')?.invalid && formulario.get('NomeUnidade')?.touched" class="text-danger">
+            Nome da U.G é obrigatório.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NÚMERO DO PROCESSO -->
+    <div class="form-section">
+      <div class="section-title">PROCESSO RIO</div>
+      <div class="row">
+        <div class="col-md-6">
+          <label for="inputNumProcesso">Número do processo de pagamento</label>
+          <input type="text" class="form-control" formControlName="NumeroProcessoRio" id="inputNumProcesso" placeholder="SMSPROXXXX-XXXXXX" required>
+          <div *ngIf="formulario.get('NumeroProcessoRio')?.invalid && formulario.get('NumeroProcessoRio')?.touched" class="text-danger">
+            Número do processo é obrigatório.
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="inputDataAbertura">Data de abertura do Processo Rio</label>
+          <input type="date" class="form-control" formControlName="DataEmissao" id="inputDataAbertura" required>
+          <div *ngIf="formulario.get('DataEmissao')?.invalid && formulario.get('DataEmissao')?.touched" class="text-danger">
+            Data de abertura é obrigatória.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CNPJ -->
+    <div class="form-section">
+      <div class="section-title">EMPRESA</div>
+      <div class="row">
+        <div class="col-md-6">
+          <label for="inputCNPJ">CNPJ</label>
+          <input type="text" class="form-control" formControlName="CNPJ" id="inputCNPJ" placeholder="00.000.000/0001-00" required>
+          <div *ngIf="formulario.get('CNPJ')?.invalid && formulario.get('CNPJ')?.touched" class="text-danger">
+            CNPJ é obrigatório.
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="inputRazaoSocial">Razão Social</label>
+          <input type="text" class="form-control" formControlName="RazaoSocial" id="inputRazaoSocial" placeholder="Razão Social da Empresa" required>
+          <div *ngIf="formulario.get('RazaoSocial')?.invalid && formulario.get('RazaoSocial')?.touched" class="text-danger">
+            Razão Social é obrigatória.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTA FISCAL -->
+    <div class="form-section">
+      <div class="section-title">NOTA FISCAL</div>
+      <div class="row">
+        <div class="col-md-4">
+          <label for="inputNrNotaFiscal">Número da NF</label>
+          <input type="text" class="form-control" formControlName="NrNotaFiscal" id="inputNrNotaFiscal" placeholder="Número da Nota Fiscal" required>
+          <div *ngIf="formulario.get('NrNotaFiscal')?.invalid && formulario.get('NrNotaFiscal')?.touched" class="text-danger">
+            Número da NF é obrigatório.
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label for="inputValorBruto">Valor Bruto</label>
+          <input type="number" class="form-control" formControlName="ValorBruto" id="inputValorBruto" placeholder="R$ 0,00" required>
+          <div *ngIf="formulario.get('ValorBruto')?.invalid && formulario.get('ValorBruto')?.touched" class="text-danger">
+            Valor Bruto é obrigatório.
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label for="inputDataEmissao">Data de Emissão</label>
+          <input type="date" class="form-control" formControlName="DataEmissao" id="inputDataEmissao" required>
+          <div *ngIf="formulario.get('DataEmissao')?.invalid && formulario.get('DataEmissao')?.touched" class="text-danger">
+            Data de emissão é obrigatória.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RETENÇÕES -->
+    <div class="form-section">
+      <div class="section-title">RETENÇÕES</div>
+      <div class="row">
+        <div class="col-md-2">
+          <label for="inputCOFINS">COFINS</label>
+          <input type="number" class="form-control" formControlName="COFINS" id="inputCOFINS" placeholder="R$ 00.000" required>
+        </div>
+        <div class="col-md-2">
+          <label for="inputCSLL">CSLL</label>
+          <input type="number" class="form-control" formControlName="CSLL" id="inputCSLL" placeholder="R$ 00.000" required>
+        </div>
+        <div class="col-md-2">
+          <label for="inputISS">ISS</label>
+          <input type="number" class="form-control" formControlName="ISS" id="inputISS" placeholder="R$ 00.000" required>
+        </div>
+        <div class="col-md-2">
+          <label for="inputIR">IR</label>
+          <input type="number" class="form-control" formControlName="IR" id="inputIR" placeholder="R$ 00.000" required>
+        </div>
+        <div class="col-md-2">
+          <label for="inputPIS">PIS</label>
+          <input type="number" class="form-control" formControlName="PIS" id="inputPIS" placeholder="R$ 00.000" required>
+        </div>
+        <div class="col-md-2">
+          <label for="inputINSS">INSS</label>
+          <input type="number" class="form-control" formControlName="INSS" id="inputINSS" placeholder="R$ 00.000" required>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTA DE EMPENHO -->
+    <div class="form-section">
+      <div class="section-title">NOTA DE EMPENHO</div>
+      <div formArrayName="listEmpenho">
+        <div *ngFor="let empenho of listEmpenho.controls; let i = index" [formGroupName]="i">
+          <div class="row">
+            <div class="col-md-2">
+              <label for="inputnNE1">NE {{i + 1}}</label>
+              <input type="text" class="form-control" formControlName="NE" id="inputnNE1" placeholder="2024NEXXXXXX" required>
+            </div>
+            <div class="col-md-2">
+              <label for="inputFR">FR</label>
+              <input type="number" class="form-control" formControlName="FR" id="inputFR" placeholder="Detalhamento" required>
+            </div>
+            <div class="col-md-2">
+              <label for="inputND">Natureza da despesa</label>
+              <input type="number" class="form-control" formControlName="NaturezaDespesa" id="inputND" placeholder="XXXXXX" required>
+            </div>
+            <div class="col-md-2">
+              <label for="inputTP">Tipo patrimonial</label>
+              <input type="number" class="form-control" formControlName="TipoPatrimonial" id="inputTP" placeholder="XX" required>
+            </div>
+            <div class="col-md-2">
+              <label for="inputIP">Item patrimonial</label>
+              <input type="number" class="form-control" formControlName="ItemPatrimonial" id="inputIP" placeholder="XXX" required>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+   <!-- Botões para abrir e fechar -->
+<div class="text-right mt-3 d-flex justify-content-end" style="gap: 10px;">
+  <button type="button" class="btn btn-primary" (click)="openFields()">Abrir Campos</button>
+  <button type="button" class="btn btn-danger" (click)="closeFields()">Fechar Campos</button>
+</div>
+
+<!-- Novos campos NE2 e NE3 (inicialmente escondidos) -->
+<div class="form-section" *ngIf="fieldsVisible">
+  <div class="section-title">NOTA DE EMPENHO</div>
+
+  <!-- Linha para os campos NE2 e seus respectivos campos -->
+  <div class="row mt-3">
+    <div class="col-md-2">
+      <label for="inputNE2">NE 2</label>
+      <input type="text" class="form-control" formControlName="NE2" id="inputNE2" placeholder="2024NEXXXXXX">
+    </div>
+    <div class="col-md-2">
+      <label for="inputFR2">FR</label>
+      <input type="text" class="form-control" formControlName="FR2" id="inputFR2">
+    </div>
+    <div class="col-md-2">
+      <label for="inputNaturezaDespesa2">Natureza da Despesa</label>
+      <input type="text" class="form-control" formControlName="NaturezaDespesa2" id="inputNaturezaDespesa2">
+    </div>
+    <div class="col-md-2">
+      <label for="inputTipoPatrimonial2">Tipo Patrimonial</label>
+      <input type="text" class="form-control" formControlName="TipoPatrimonial2" id="inputTipoPatrimonial2">
+    </div>
+    <div class="col-md-2">
+      <label for="inputItemPatrimonial2">Item Patrimonial</label>
+      <input type="text" class="form-control" formControlName="ItemPatrimonial2" id="inputItemPatrimonial2">
+    </div>
+  </div>
+
+  <!-- Linha para os campos NE3 e seus respectivos campos -->
+  <div class="row mt-3">
+    <div class="col-md-2">
+      <label for="inputNE3">NE 3</label>
+      <input type="text" class="form-control" formControlName="NE3" id="inputNE3" placeholder="2024NEXXXXXX">
+    </div>
+    <div class="col-md-2">
+      <label for="inputFR3">FR</label>
+      <input type="text" class="form-control" formControlName="FR3" id="inputFR3">
+    </div>
+    <div class="col-md-2">
+      <label for="inputNaturezaDespesa3">Natureza da Despesa</label>
+      <input type="text" class="form-control" formControlName="NaturezaDespesa3" id="inputNaturezaDespesa3">
+    </div>
+    <div class="col-md-2">
+      <label for="inputTipoPatrimonial3">Tipo Patrimonial</label>
+      <input type="text" class="form-control" formControlName="TipoPatrimonial3" id="inputTipoPatrimonial3">
+    </div>
+    <div class="col-md-2">
+      <label for="inputItemPatrimonial3">Item Patrimonial</label>
+      <input type="text" class="form-control" formControlName="ItemPatrimonial3" id="inputItemPatrimonial3">
+    </div>
+  </div>
+</div>
+
+    <!-- BOTÕES PDF E ENVIO PRA API -->
+    <div class="text-right mt-3 d-flex justify-content-end" style="gap: 10px;">
+      <button type="button" class="btn btn-primary" (click)="open(modalContent)" [disabled]="formulario.invalid">
+        Enviar Cadastro
+      </button>
+    </div>
+  </form>
+
+  <ng-template #modalContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Resumo dos Dados:</h4>
+    </div>
+    <div class="modal-body">
+      <div><strong>U.G:</strong> {{ formulario.get('UG')?.value }}</div>
+      <div><strong>Nome da U.G:</strong> {{ formulario.get('NomeUnidade')?.value }}</div>
+      <div><strong>Nº do processo de pagamento:</strong> {{ formulario.get('NumeroProcessoRio')?.value }}</div>
+      <div><strong>Abertura no Processo Rio:</strong> {{ formulario.get('DataEmissao')?.value | date: 'dd/MM/yyyy' }}</div>
+      <div><strong>CNPJ:</strong> {{ formulario.get('CNPJ')?.value }}</div>
+      <div><strong>Razão Social:</strong> {{ formulario.get('RazaoSocial')?.value }}</div>
+      <div><strong>Número da NF:</strong> {{ formulario.get('NrNotaFiscal')?.value }}</div>
+
+      <!-- Exibindo os valores monetários exatamente como digitado -->
+      <div><strong>Valor Bruto:</strong> {{ formulario.get('ValorBruto')?.value | currency:'BRL':'symbol' }}</div>
+      <div><strong>Data de emissão:</strong> {{ formulario.get('DataEmissao')?.value | date: 'dd/MM/yyyy' }}</div>
+      <div><strong>COFINS:</strong> {{ formulario.get('COFINS')?.value | currency:'BRL':'symbol' }}</div>
+      <div><strong>CSLL:</strong> {{ formulario.get('CSLL')?.value | currency:'BRL':'symbol' }}</div>
+      <div><strong>ISS:</strong> {{ formulario.get('ISS')?.value | currency:'BRL':'symbol' }}</div>
+      <div><strong>IR:</strong> {{ formulario.get('IR')?.value | currency:'BRL':'symbol' }}</div>
+      <div><strong>PIS:</strong> {{ formulario.get('PIS')?.value | currency:'BRL':'symbol' }}</div>
+      <div><strong>INSS:</strong> {{ formulario.get('INSS')?.value | currency:'BRL':'symbol' }}</div>
+
+      <!-- Exibindo os empenhos -->
+      <div *ngFor="let empenho of listEmpenho.controls; let i = index">
+        <div><strong>NE {{ i + 1 }}:</strong> {{ empenho.get('NE')?.value }}</div>
+        <div><strong>FR:</strong> {{ empenho.get('FR')?.value }}</div>
+        <div><strong>Natureza da Despesa:</strong> {{ empenho.get('NaturezaDespesa')?.value }}</div>
+        <div><strong>Tipo Patrimonial:</strong> {{ empenho.get('TipoPatrimonial')?.value }}</div>
+        <div><strong>Item Patrimonial:</strong> {{ empenho.get('ItemPatrimonial')?.value }}</div>
+      </div>
+
+      <!-- Exibindo os campos de NE2 -->
+      <div *ngIf="formulario.get('NE2')?.value">
+        <div><strong>NE 2:</strong> {{ formulario.get('NE2')?.value }}</div>
+        <div><strong>FR:</strong> {{ formulario.get('FR2')?.value }}</div>
+        <div><strong>Natureza da Despesa:</strong> {{ formulario.get('NaturezaDespesa2')?.value }}</div>
+        <div><strong>Tipo Patrimonial:</strong> {{ formulario.get('TipoPatrimonial2')?.value }}</div>
+        <div><strong>Item Patrimonial:</strong> {{ formulario.get('ItemPatrimonial2')?.value }}</div>
+      </div>
+
+      <!-- Exibindo os campos de NE3 -->
+      <div *ngIf="formulario.get('NE3')?.value">
+        <div><strong>NE 3:</strong> {{ formulario.get('NE3')?.value }}</div>
+        <div><strong>FR:</strong> {{ formulario.get('FR3')?.value }}</div>
+        <div><strong>Natureza da Despesa:</strong> {{ formulario.get('NaturezaDespesa3')?.value }}</div>
+        <div><strong>Tipo Patrimonial:</strong> {{ formulario.get('TipoPatrimonial3')?.value }}</div>
+        <div><strong>Item Patrimonial:</strong> {{ formulario.get('ItemPatrimonial3')?.value }}</div>
+      </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="gerarPDF()">Gerar PDF</button>
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Fechar</button>
+    </div>
+

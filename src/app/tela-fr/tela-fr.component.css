@@ -1,0 +1,192 @@
+/* Tela FR Component CSS */
+
+/* Adicionando estilo ao título da tela */
+h5 {
+  font-weight: 600;
+  font-size: 1.5rem;
+  text-decoration: underline;
+}
+
+/* Estilizando o botão de salvar */
+button.btn-primary {
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+/* Estilo para os inputs, como o campo de data e o campo de valor */
+input[type="date"] {
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Estilizando o campo de valor */
+#inputValor {
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Adicionando um espaçamento entre o campo de seleção e o campo de valor */
+.form-row {
+  margin-bottom: 1rem;
+}
+
+/* Definindo a largura do select para que não fique tão grande */
+#inputUG {
+  width: 100%;
+}
+
+/* Alinhamento para a área de data */
+.mb-3.d-flex.justify-content-end {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* Melhorando o estilo dos campos de seleção e de texto */
+select.form-control, input.form-control {
+  font-size: 1.2rem;
+  padding: 10px;
+}
+
+/* Estilo para a sidebar */
+.sidebar-wrapper {
+  background-color: #343a40;
+  color: white;
+  font-size: 1.2rem;
+  position: fixed;  /* Sidebar fixa no lado esquerdo */
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 250px; /* Ajuste conforme necessário */
+  padding-top: 20px;
+}
+
+.sidebar-wrapper .menu-title {
+  font-size: 1.1rem;
+  padding-left: 20px;
+}
+
+.sidebar-wrapper a {
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  display: block;
+}
+
+.sidebar-wrapper a:hover {
+  background-color: #495057;
+}
+
+/* Estilos específicos para submenus */
+.metismenu {
+  padding-left: 0;
+  list-style: none;
+}
+
+.metismenu li {
+  position: relative;
+}
+
+.metismenu li a {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.metismenu li a:hover {
+  background-color: #495057;
+}
+
+.metismenu li.has-arrow > a:after {
+  content: "\e8dd";  /* Adiciona uma seta para indicar que o item tem submenu */
+  font-family: "Boxicons";
+  font-size: 1.2rem;
+  margin-left: auto;
+}
+
+.metismenu li.has-arrow.open > a:after {
+  content: "\e8da";  /* Inverte a seta quando o submenu está aberto */
+}
+
+.metismenu .metismenu {
+  display: none;
+  padding-left: 20px;
+}
+
+.metismenu li.has-arrow.open > .metismenu {
+  display: block; /* Exibe o submenu quando o item é clicado */
+}
+
+/* Estilo para o texto da página */
+.page-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.page-breadcrumb {
+  font-size: 1.1rem;
+}
+
+.card-body {
+  font-size: 1.1rem;
+  padding: 1.5rem;
+}
+
+/* Adicionando estilos para a barra superior (topbar) */
+.topbar .navbar {
+  padding: 10px;
+  background-color: #343a40;
+  position: fixed; /* Navbar fixa no topo */
+  top: 0;
+  left: 250px; /* Ajuste de acordo com a largura da sidebar */
+  width: calc(100% - 250px); /* Ajuste de largura com a sidebar */
+  z-index: 10;
+}
+
+.user-info p {
+  font-size: 1rem;
+  margin: 0;
+  color: white;
+}
+
+.user-box a {
+  color: white;
+}
+
+.user-box a:hover {
+  color: #00bcd4;
+}
+
+/* Responsividade - ajustando as colunas em telas menores */
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+  }
+
+  /* Ajuste para a sidebar */
+  .sidebar-wrapper {
+    width: 200px; /* Reduz a largura da sidebar em dispositivos menores */
+  }
+
+  /* Ajuste do conteúdo principal */
+  .flex-grow-1 {
+    margin-left: 0; /* Remove o offset da sidebar em telas menores */
+  }
+
+  /* Ajuste no navbar */
+  .topbar .navbar {
+    left: 0;
+    width: 100%; /* O navbar vai ocupar toda a largura da tela */
+  }
+}
+
+@media (max-width: 576px) {
+  .sidebar-wrapper {
+    width: 150px; /* Ajusta a sidebar para dispositivos muito pequenos */
+  }
+
+  .flex-grow-1 {
+    margin-left: 0; /* Remove o offset da sidebar */
+  }
+}
