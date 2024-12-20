@@ -6,6 +6,12 @@ import { HttpHeaders } from '@angular/common/http';
 import { DatePipe } from '@angular/common';  // Importando DatePipe
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';  // Importando o NgbModal
 import { jsPDF } from 'jspdf';  // Importando jsPDF
+export interface Empresa {
+  cnpj: string;
+  razaoSocial: string;
+  UG: BigInt;
+  nomeUnidade: string;
+}
 
 @Component({
   selector: 'app-home',
@@ -19,7 +25,9 @@ export class HomeComponent {
   formulario: FormGroup;
   showErrorMessage: boolean = false;  // Variável para controlar a exibição da mensagem de erro
   isFormInvalid: boolean = false;  // Variável para controlar se o formulário está inválido
-  fieldsVisible = false; // Variável para controlar a visibilidade dos campos NE2 e NE3
+  fieldsVisible = false; // Variável para controlar a visibilidade dos campos NE2
+  ne3Visible = false; // Variável para controlar a visibilidade dos campos NE3 (inicializada corretamente)
+  empresa!: any;
 
 
   constructor(
@@ -45,16 +53,16 @@ export class HomeComponent {
       INSS: ['', Validators.required],
       listEmpenho: this.fb.array([this.criarEmpenho()]), // Inicializando o array de empenhos
       // Campos adicionais para NE2 e NE3
-      NE2: ['', Validators.required],
-      FR2: ['', Validators.required],
-      NaturezaDespesa2: ['', Validators.required],
-      TipoPatrimonial2: ['', Validators.required],
-      ItemPatrimonial2: ['', Validators.required],
-      NE3: ['', Validators.required],
-      FR3: ['', Validators.required],
-      NaturezaDespesa3: ['', Validators.required],
-      TipoPatrimonial3: ['', Validators.required],
-      ItemPatrimonial3: ['', Validators.required]
+      NE2: [''],
+      FR2: [''],
+      NaturezaDespesa2: [''],
+      TipoPatrimonial2: [''],
+      ItemPatrimonial2: [''],
+      NE3: [''],
+      FR3: [''],
+      NaturezaDespesa3: [''],
+      TipoPatrimonial3: [''],
+      ItemPatrimonial3: ['']
   });
 }
 
@@ -74,15 +82,33 @@ export class HomeComponent {
     (this.formulario.get('listEmpenho') as FormArray).push(this.criarEmpenho());
   }
 
-  // Função para abrir os campos NE2 e NE3
-  openFields() {
-    this.fieldsVisible = true;  // Exibe os campos
+// Variáveis para controlar a visibilidade dos submenus
+isProcessosSubMenuVisible: boolean = false;
+isFornecedoresSubMenuVisible: boolean = false;
+  // Funções para alternar a visibilidade dos submenus
+  toggleProcessosSubMenu() {
+    this.isProcessosSubMenuVisible = !this.isProcessosSubMenuVisible;
   }
 
-  // Função para fechar os campos NE2 e NE3
-  closeFields() {
-    this.fieldsVisible = false;  // Esconde os campos
+  toggleFornecedoresSubMenu() {
+    this.isFornecedoresSubMenuVisible = !this.isFornecedoresSubMenuVisible;
   }
+
+
+   // Função para alternar entre abrir e fechar os campos NE2
+  toggleFields(): void {
+    this.fieldsVisible = !this.fieldsVisible; // Alterna entre true e false
+    if (!this.fieldsVisible) {
+      this.ne3Visible = false; // Se os campos NE2 forem fechados, também fecha NE3
+    }
+  }
+
+  // Função para alternar entre abrir e fechar os campos NE3
+  toggleNe3Fields(): void {
+    this.ne3Visible = !this.ne3Visible; // Alterna a visibilidade dos campos NE3
+  }
+
+
 
   // Função para formatar o CNPJ
   formatarCNPJ(cnpj: string): string {
@@ -90,11 +116,18 @@ export class HomeComponent {
                .replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');  // Aplica a formatação correta
   }
 
+  formatarNomeUnidade(NomeUnidade: string): string {
+    return NomeUnidade.toUpperCase(); // Converte para maiúsculas
+    // ou
+    // return nomeUnidade.toLowerCase(); // Converte para minúsculas
+  }
+
   // Função para formatar valores financeiros para o padrão brasileiro
   formatarValor(valor: number): string {
     if (valor === null || valor === undefined) {
       return 'R$ 0,00';  // Retorna '0,00' se o valor for inválido
     }
+
 
     // Usa toLocaleString para formatar o valor no padrão brasileiro
     return valor.toLocaleString('pt-BR', {
@@ -105,13 +138,36 @@ export class HomeComponent {
     });
   }
 
-  // Função para enviar os dados para a API
   enviarDadosParaAPI(formData: any) {
+    if (this.formulario.invalid) {
+      this.showErrorMessage = true;  // Exibe uma mensagem de erro
+      return;  // Interrompe a execução se o formulário for inválido
+    }
+
+    // Verificando se RazaoSocial foi preenchido
+  const razaoSocial = this.formulario.get('RazaoSocial')?.value;
+  if (!razaoSocial || razaoSocial.trim() === '') {
+    console.error('Razão Social não pode ser vazio.');
+    return;
+  }
+
+  // Verificando se RazaoSocial foi preenchido
+  const nomeUnidade = this.formulario.get('NomeUnidade')?.value;
+  if (!nomeUnidade || nomeUnidade.trim() === '') {
+    console.error('O nome da unidade não pode ser vazio.');
+    return;
+  }
+
+  // Preenchendo os dados do formData (incluindo RazaoSocial)
+  formData.RazaoSocial = razaoSocial;
+  formData.NomeUnidade = nomeUnidade;
+
     const formattedDataEmissao = this.datePipe.transform(formData.DataEmissao, 'yyyy-MM-dd');
     formData.DataEmissao = formattedDataEmissao;
 
     // Garantindo que 'UG' seja tratado como string
     formData.UG = String(formData.UG);  // Garantir que UG seja string
+    formData.NomeUnidade = String(formData.UG);
     formData.NumeroProcessoRio = String(formData.NumeroProcessoRio);
     formData.ValorBruto = String(formData.ValorBruto);
     formData.COFINS = String(formData.COFINS);
@@ -123,6 +179,7 @@ export class HomeComponent {
 
     // Formatando o CNPJ
     formData.CNPJ = this.formatarCNPJ(formData.CNPJ);
+    formData.NomeUnidade = this.formatarNomeUnidade(formData.NomeUnidade)
 
     // Convertendo todos os itens do array listEmpenho para string também
     formData.listEmpenho.forEach((item: any) => {
@@ -149,16 +206,69 @@ export class HomeComponent {
       'Content-Type': 'application/json'
     });
 
-    // Enviar os dados para a API
-    this.http.post('http://10.1.72.147:80/api-gpl/Api/Unidade/ProcessoCadastro', formData, { headers })
-      .subscribe({
-        next: (response) => {
-          console.log('Dados enviados com sucesso!', response);
-        },
-        error: (error) => {
-          console.error('Erro ao enviar dados:', error);
-        }
-      });
+
+
+     // Enviar os dados para a API
+  this.http.post('http://10.1.72.147:80/api-gpl/Api/Unidade/ProcessoCadastro', formData, { headers })
+  .subscribe({
+    next: (response) => {
+      console.log('Dados enviados com sucesso!', response);
+    },
+    error: (error) => {
+      console.error('Erro ao enviar dados:', error);
+      if (error?.error?.errors) {
+        console.error('Detalhes do erro:', JSON.stringify(error.error.errors, null, 2));
+      }
+    }
+  });
+}
+
+  buscarCnpj() {
+    const cnpj = this.formulario.get('CNPJ')?.value;
+    console.log(cnpj)
+    if (cnpj) {
+      const apiUrl = 'http://10.1.72.147/api-gpl/Api/Empresa/BuscarEmpresa';
+        const params = { cnpj }; // Adiciona o CNPJ como parâmetro de consulta
+        const body = { cnpj }; // Corpo da requisição
+
+        this.http.post(apiUrl, body, { params }).subscribe(
+          (response : any) => {
+            this.formulario.patchValue({
+              RazaoSocial: response.razaoSocial,
+            });
+            this.formulario.get('RazaoSocial')?.disable(); // Desabilita o campo
+            console.log(response)
+          },
+          (error) => {
+            window.alert('CNPJ não cadastrado');
+            console.error('Erro ao buscar o CNPJ:', error);
+          }
+        );
+    }
+  }
+
+  buscarUG() {
+    const UG = this.formulario.get('UG')?.value;
+    console.log(UG)
+    if (UG) {
+      const apiUrl = 'http://10.1.72.147/api-gpl/Api/Unidade/BuscarUnidade';
+        const params = { UG }; // Adiciona a UG como parâmetro de consulta
+        const body = { UG }; // Corpo da requisição
+
+        this.http.post(apiUrl, body, { params }).subscribe(
+          (response : any) => {
+            this.formulario.patchValue({
+              NomeUnidade: response.nomeUnidade,
+            });
+            this.formulario.get('NomeUnidade')?.disable(); // Desabilita o campo
+            console.log(response)
+          },
+          (error) => {
+            window.alert('Unidade não cadastrada');
+            console.error('Erro ao buscar UG:', error);
+          }
+        );
+    }
   }
 
   // Função para gerar o PDF usando jsPDF
@@ -285,45 +395,47 @@ export class HomeComponent {
       return;
     }
 
-    // Linha de separação
-    doc.line(20, yPosition, 190, yPosition);
+   // Linha de separação
+  doc.line(20, yPosition, 190, yPosition);
+  yPosition += 10;
+
+  // Adicionando tabela para os empenhos
+  const empenhos = formData.listEmpenho;
+
+  if (empenhos && empenhos.length > 0) {
+    addBoldText('Notas de Empenho:');
+
+    // Cabeçalhos da tabela
+    doc.setFont("helvetica", "bold");
+    doc.text("NE", 20, yPosition);
+    doc.text("FR", 35, yPosition);
+    doc.text("Natureza Despesa", 55, yPosition);
+    doc.text("Tipo Patrimonial", 95, yPosition);
+    doc.text("Item Patrimonial", 135, yPosition);
     yPosition += 10;
 
-    // Adicionando tabela para os empenhos
-    const empenhos = formData.listEmpenho;
+    // Dados dos empenhos
+    doc.setFont("helvetica", "normal");
 
-    if (empenhos && empenhos.length > 0) {
-      addBoldText('Notas de Empenho:');
+    empenhos.forEach((empenho: any, index: number) => {
+      const ne = String(empenho.NE || '');
+      const fr = String(empenho.FR || '');
+      const naturezaDespesa = String(empenho.NaturezaDespesa || '');
+      const tipoPatrimonial = String(empenho.TipoPatrimonial || '');
+      const itemPatrimonial = String(empenho.ItemPatrimonial || '');
 
-      // Cabeçalhos da tabela
-      doc.setFont("helvetica", "bold");
-      doc.text("NE", 20, yPosition);
-      doc.text("FR", 50, yPosition);
-      doc.text("Natureza Despesa", 70, yPosition);
-      doc.text("Tipo Patrimonial", 120, yPosition);
-      doc.text("Item Patrimonial", 160, yPosition);
+      doc.text(ne, 20, yPosition);
+      doc.text(fr, 35, yPosition);
+      doc.text(naturezaDespesa, 55, yPosition);
+      doc.text(tipoPatrimonial, 95, yPosition);
+      doc.text(itemPatrimonial, 135, yPosition);
       yPosition += 10;
+    });
 
-      // Dados dos empenhos
-      doc.setFont("helvetica", "normal");
+    doc.line(20, yPosition, 190, yPosition);  // Linha de separação
+  }
 
-      empenhos.forEach((empenho: any, index: number) => {
-        const ne = String(empenho.NE || '');
-        const fr = String(empenho.FR || '');
-        const naturezaDespesa = String(empenho.NaturezaDespesa || '');
-        const tipoPatrimonial = String(empenho.TipoPatrimonial || '');
-        const itemPatrimonial = String(empenho.ItemPatrimonial || '');
 
-        doc.text(ne, 20, yPosition);
-        doc.text(fr, 50, yPosition);
-        doc.text(naturezaDespesa, 70, yPosition);
-        doc.text(tipoPatrimonial, 120, yPosition);
-        doc.text(itemPatrimonial, 160, yPosition);
-        yPosition += 10;
-      });
-
-      doc.line(20, yPosition, 190, yPosition);
-    }
 // Logo Rodapé
 const logoBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYYAAACBCAMAAADzLO3bAAAA7VBMVEX///8AUpwASXx7u+j7/f4AR3ukucszYIoAR5cATJkARXoATpoARJZ3uecpWIV1uOcAPnYAOXPr8PQASZhokL4AN3JLerEfY6bW4+81aJKjvNe6y9/O2uk9da/q9Pv2+v1UfZ8AVp+Cv+mx1vGXsdCZscVDaI+PqswyZ6bd7fmPxeuWyOyFnLTF4PSizu5JdJne6O+w1fEAMW/k6u9ce5wAKmy/3fNniqlzlLAAPZO5yt+/ztrP5vZ8mbPH0t0AOZKetchgr+R/n8ZdibkALI0AKmu0wM4UUoKvv9c+cJdPe5+JoscAGGRxj7wADmL/tjt5AAAPZklEQVR4nO2cDVuiTBfHSfCNxBkwysqghawFBAULK9G72ietbff+/h/nOcObIrTl7V7tejX/3WtXGd48P+acM2dGGYaKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKiorqLanTP30Hf4k4w2Bc0zR1Bl58uO7m3Mdf9O+TryEtYAzbtg1GF5Bpf/D1K1WKIdCZIFAMnbFZlvUZOzD8gHGDj7wFioExWJtRLYSQJmikVwgIWRxjI+UD74FiYBhF13VkK6yAbLC+YBouchznQyMExQDdQUACPPsQE8AjIWBhwHvhIzsDxUCkuqQjBAjpio5QGKR99UPvgGIgUiEsmJrlOK7jWKbFCuYHW4ViIFJY01cUxQgCw4D/fZP9UJf06TFwTODDf6qi2NAV/CCwfegQtqIQqyjgmAz/Q+7jk2NwbNO0Lcsy0b1mWpFM7R6R14Ghc4a5PHwYfT9d1qgylVZPOOgM/st9bBWG25P9jE46m53PVjRBMB3bACmGkf5H/lF830eQxC7nrXM+K4zno0wxqNIs41J1tv6dbBWGo8ZuRo3bjU7HsRrLIsddsrS7SJAMwKBpyAGXlezQLJdWVMa4P0wPGYnlUrnEi5O1b2W7MNR2Mqodb3Y+TYAhm6EvMCj3cSgIo4Jx7wqa6gTodQwAghfHcfNMjtrL8tr10k+LgUOm7wgCq/jheNkJUyPFCWt6hqYQDLYKO2hkUBerCANY3YutfsnHW/jLde/m02JgXCSAkQ0b+QSDfg8AlMA0VDKK0MAo0GIHiIUO4ySHFGMAzxS6MnWeNJfn697M58XAWALLOgoSXNIRDDcINIgFJtICJXRTgAEpNnCw0iOyGBZv+BFpldIt5dK69/JZMXC2Y7GsEFiCEPkjFZm6w5iQwuqRFwIMAssh1lS4xEQJBgjEIB4nTqgkkyyVe06d0vfVq71l5M+KwbpHoUsC168TDCqkrpplsqalaQ5LOBgB+COFcVlTs+MYHWMo81NVkqTB+DCxO+6S5oocU5LHS1dq9/pz7PHz594vRhSfFQMH/YD4fjB+6IJcVRdYFXoDE2iMAq+YABCxKNAFDVl2ZKQUQzs6iVqNuwd/GL6HhJV0lKWElZs9y5iHrXAQ9vrj1dtI9FkxMApEAoMVoDOEvUE3fCSYimUEmhYYJHkyHNjCCqpt6gZXjIGZ4SQaRO+7cyzyzUp6kfahnDouQkteGmRk9GkxWJqjmGB5x9FIcqTrms7qluNChNB0PSDlPt/SEDINCORx2TuHYZAaOK5qqO3pYGHQCl6GEHqvefGQ4tNi4IjfCQImsMj8Pzz9GgRlU0M2o4Bngg7iO6atGoGuGEZSbn0VQ5knTzk3HA4hZsC/UWtFzie4ZVzomD4tBhix6RALVN20YFwAj7tGeojLWoBB5cDwpgtRw3VN00oLHDkM08Qp8WQfKa01hY1tMQchzLKKIvUnxuDfazYyTMe0SCBwWNe/dxjH0h3WIYNpEzioEMLZRa0jh+F77HSi8ZrEx+0RhuaqR4qJnRdY/BNjYHRBMG2kCzokShwHCZKrWTBmUE2VOCUXASQDLVFYYIge6OEoHShE47fEB4UY7tLOAEkSxnzqoMRK/la2C0MjQ2HDCivkQMg2TYdU7uDpZ0lhyUJuoFphaS9ArqYxJFikSkfR1XOiUvq4R9W9LIbFmBpfdivdkZgyO8ybfKswPH05yOjLJr1BYRGCEbNlCiqp6YFTcpALXUMjTolkSoLmIN1GzuKQFEOZRIBF/I1rSBkMYzmx+jyaFRmkTgrns6WtwvBbFTiQBCHBMkkdj7MV39QUw+RshAIlXLKHHEdAgVuEYUVxiTWDYYITRElITmtOOD8f8bEYlNuzi1ASwx3f3t4+Rald5+KM3MUgbn2Jdh48HHcGYZYitY+Pjy4evu29qW9rTUFyYXVPVyASWAx3T9Ij+Itc1eIgoQ18GL2ZzNLigFcwiNdRcwZDsm9U5wg1i6NFQR18LQy90/5Gy3fOWrVaq9ZoNFoDRj1o1Gr/RF7l7OYLnPelDq3Q2PhftHfnn1p9d+fL1/29i6fb4+MOt3dTf0s37V9cflUqBGCWFVjkkiVjpL7KCpqmQXYE0UInNW5S/Fv6xIUYyvIobs5gSDxQeWncLMYhvpqz4joYBvxjQZB/vy5IhK2dEEmM+nV3Z6cRY6gdqMxD2vo12r0TBeTd3TrQq9Ua+8xeNkQXqLEOBjKdQBRGYQUpEBFMxtb9e0idmKTNLwrRyxTKd0lzBoMXNzel3PHleW4lwToYelfrT7IuSSFGrCdRdRXDgCSj9WUrdlaMXnsHh3UwcK4dm5rkRbolgDsyXWSSIgeMpcMmViiMDUs4yvP00c5gEAtMPv8tGGYb9YU4608ut4KBe2lB48Hyzaxi2GkBh1re9P8Vg2pGGMjsWgCBmfE1gdXBCakaWUHpCBEGc3FEOt9A6qhp/tlPmjMY0ni8SIvUpIdU34VB6h32ezFjKXZ847vwdJ07QDG9q1Qq42iHWSXSOz72BTF0/SH2lasYHurkgX9ZusEchp3at7c4rIVBC2IMCmexKFyQ5IfW8CFZUvQIg68tDJSZbzhNOMhJEM5g6MfN/Cg9vIdXwaUqwCDNRVGW49JH7zH6YP3H0CF1HyFFnnjQLsvXBESV7Ct75Xd87DOCYafeODkjts5hCFtbjf2jhEQew9sc1sIgGDEGl4P0lWxyzejZtxlOd2MMbAGGdmimxOpefNEMhm5SbkpTpVkyknhfwtoTq+PxecwY44jmZTSX0RWrhGr1+vqcFw/BYOf88/X19eg9QaMdm3W3VrvIx4ZOppWoAMNObY/Za/0mDJwQmJGpHYOJrADZUtxo+EIUHHxtcUS2pjROJxviL65lMAy8pFW8bKuqKk3EtPldw7cRviSF86hZLOPw6cxgEAmacZkQOhe7q8e/qv3UgI2LfKa0aL05C7cWYQg5/KI/rJUpWW5sa0GzrHBhgK6QJEm1XceMorfgWPkQnZT2eukDHz2q2WJGOjNd4sVmtYpx+ragtleAoSLzo+TTwAAc98iLPAbS7STmHPckSXrfaEI9adQTe0k5DNKitRbeUyGGNzisl7AKRvzIs4IgpMUjgyVLZ+LtNioq7UVX4RL/XxLD9ZJZDNOkO5AjyuVFcoULFlcWheiRiMV+2HGmIj+Ww4ysAMNQlNvglMo8L78zheKevn2JbN245VYxMOrTt4OoNaqcFmPYqf38hV9aCwPHBuySkEIW1RsKKyy2Cf5SopQrdA+T8BBN+2QxgFcpFQmPcjfySsI6q4o4dGB9OKYZoi7CgMUpYGien6+xeFbq7BFLty6YHIZFa+2JvHkFQ8jhtf6wFgZGcVKLk2lnXXccxyXD53RzvHomVsFcdLIm4JnJYVDnRRMOfD5bZV4bN6izJoasaoDlAYQHsuwgxXCYYpiJeBjGhjdX4WRFcqJXMIC+7b6F4Vcc1sJgmAsKriMI0YNPXizwCFa+prTAwFyn4aGXwwCdJc+BbxZWvQowTMmzXRHBF11jvte75knHmIhhsvuddKkIg3RISK0TomMR8zaemP16Ym/moXaStpJBXuNXTumXHNbAwDnhQw9BAR5/pBnx8j3FgZGcJYQKObB+aqE8Bq6aVq/HOQzM8Hl1HlTsF/WFIgxDjLuDdh+fwmnLsud5mFQEpzKeDAY9ntR0e+Jpe9qdY3I353jS7nSm6yxh/gn2/yIxZ2Dl3bAXdHYbZ+nnOoHesBO+fB3D6xzW6Q2GiciXoV078ANbQ7quIUcJdD3wWeQQBwWDaQJpaS46mWteXGWAkwnouZrORYvpp+nyeBGbyzhKdwpU0BvG2MNYBBt3xVJ7Ou3MPDLp15XFcln0yHl6mMcwZisR25+TL1tg7L0nV4q+G/IVKBCzq+RF/eDlaW+3ThKlqPUAKPwTTap1bl7FEOZLRZTWiw2qQVYOB65lWobrEAWaaWqa5juW6diq4juuv5Qp9Q9jLTmWSrKtOlH7sZ4XzVK3KUeksFzqFXcF5pViRvf0cAJX6lfvwvffq8TxjL+XyqfhZF+3ClcdVULLn8b38B4M9RZRvd5qhAO0wReS8LRq9dYuGG/YiFp3a42jaPf2QeumUavBAa9w2P2SU2stDB+jwd0IdN39lcf4yGmfk0j7L8naw4cGmLl2s0ceEilu/XaxVKCXOkdnFz/3D+o3NzeNcGcQIVmv3+yRkS9H/iz93Vb92UlQ9fbs7OnVnprZU4EQdPz09HR0dPby8PPnw8NLh9nb8Ns+f4+2aS76+On4uNNO1WkPnv70Lf0ubROGnzdkAnWhFkcx/AG9rNQwagzF8Ad0sYpBpbHhD+hsde3kYMOvp/892iYMuSWs/+2HEf5GbROGp9xK4o3uneuC0iV1E1A6wBqTpm6cSVfI69lyQzRW5SrxVxVm4cZuPAlxNwv3i8ezFThtZWlsOy0uRm8ThuPVFTOb/VaD6mHRSyqTAxljz0vmcieeKIpXsV2rsih68UK7UxmLohwNMKV5vPFZFjEW4zVc6pzUQK9/xAwvRbjIUm37slp4L9uEob2K4Wij06nySBpUy5GJBvJEGjST705NvLE0HEaW4Q6r8DpuGHmdtEFqxhikocQ/S8PomVfDrZOrBMO8PZx4d8k1h2LBRDSzXRiklVpf62Gj06neNTy2j9GjPZB78Kzj2EdNvNkgqU5xh+eLY0beOG1IMYBwWs1bxdBUmeljWljt4XnR5NtWYVBXekP922ank58rE74ZPcQD8bIywYdx0wQ8SeJWuMPS+fl50ht42btKlnC9C0Op260mP6rBqOKoh4u+DLpVGFaqrLtfNzsdxldyP362B6R4ny5qnHiVzjQ2DGC4vDxNMMjjdG7lXRhGmJcXX++58zrDx6I5h23CwJHJiIw2Oh3EBibNYYhT6qd+e/K4SIUhNiyOGT0uom0xBqZJVi0devG7y7k0866Ttnl5NCo1CyYFtgkDs7+Cob7RMn9VXnLTBIOKk2XBE/G614t/XCGLQZxAQ5wpFWPoef3KZZpzAQboGkm6K5Plr3LBV3K3CsPPVvbXxWobTfKoP04XbwY/wHDTf+Mt11egfyNzcfOln+X5Thp+JF/uWaxFvVpC1ZOvHtNVjJeQfHHNqwjc3OMI/YKcdfyc3/bX6uhkRX+2mPHqNNO7ZlCoqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioPlb/B2Z80TfSzg8HAAAAAElFTkSuQmCC';
 const logoWidth = 50;  // Largura da logo

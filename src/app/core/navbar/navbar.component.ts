@@ -8,6 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
-  userName: string = 'Thais'; // Nome do usuário logado
+  userName: string = ''; // Nome do usuário logado
 
 }

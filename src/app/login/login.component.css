@@ -1,34 +1,30 @@
 /* Fundo azul gradiente */
 body, .authentication-forgot {
-  height: 100vh;
-  margin: 0;
-  background: linear-gradient(to right, #007bff, #0056b3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Centraliza a área de login */
-.card.forgot-box {
-  width: 400px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-/* Ícone no topo */
-.icon-container {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.icon-container img {
-  width: 80px; /* Ajuste o tamanho do ícone */
-  height: auto;
-}
-
-
+    height: 100vh;
+    margin: 0;
+    background: linear-gradient(to right, #007bff, #0056b3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   
+  /* Centraliza a área de login */
+  .card.forgot-box {
+    width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
   
-
+  /* Ícone no topo */
+  .icon-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .icon-container img {
+    width: 80px; /* Ajuste o tamanho do ícone */
+    height: auto;
+  }
+  
   

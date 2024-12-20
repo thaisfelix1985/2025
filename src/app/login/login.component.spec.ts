@@ -11,95 +11,106 @@ describe('LoginComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, HttpClientTestingModule],
-      declarations: [LoginComponent],
+      imports: [
+        ReactiveFormsModule,
+        HttpClientTestingModule,
+        LoginComponent // Importa o componente standalone diretamente
+      ]
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     httpMock = TestBed.inject(HttpTestingController);
     fixture.detectChanges();
   });
 
-  afterEach(() => {
-    httpMock.verify();
-  });
-
-  it('should create', () => {
+  it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should disable the submit button when form is invalid', () => {
-    const button = fixture.debugElement.query(By.css('button[type="submit"]')).nativeElement;
+  it('should validate the form controls', () => {
+    const usernameControl = component.loginForm.get('username');
+    const passwordControl = component.loginForm.get('password');
 
-    // Form inválido por padrão
-    expect(button.disabled).toBeTrue();
+    expect(usernameControl?.valid).toBeFalse();
+    expect(passwordControl?.valid).toBeFalse();
+
+    usernameControl?.setValue('validUser');
+    passwordControl?.setValue('validPassword');
+
+    expect(usernameControl?.valid).toBeTrue();
+    expect(passwordControl?.valid).toBeTrue();
   });
 
-  it('should enable the submit button when form is valid', () => {
-    const button = fixture.debugElement.query(By.css('button[type="submit"]')).nativeElement;
+  it('should submit the form data to the API and handle the token response', () => {
+    const formData = { username: 'testUser', password: 'testPassword' };
 
-    // Atualizar valores do formulário
-    component.loginForm.setValue({
-      email: 'teste@email.com',
-      password: '123456',
-    });
-    fixture.detectChanges();
-
-    expect(button.disabled).toBeFalse();
-  });
-
-  it('should call the API and receive a token on successful login', () => {
-    const mockResponse = { token: 'fake-token' };
-
-    // Atualizar valores do formulário
-    component.loginForm.setValue({
-      email: 'teste@email.com',
-      password: '123456',
-    });
-
-    // Simular o envio do formulário
+    component.loginForm.setValue(formData);
     component.onSubmit();
-    const req = httpMock.expectOne('http://10.1.72.147/api-gpl/Api/Login/login');
 
-    expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual({
-      UserName: 'teste@email.com',
-      Password: '123456',
-    });
+    const loginRequest = httpMock.expectOne('http://10.1.72.147:80/api-gpl/Api/Login/login');
+    expect(loginRequest.request.method).toBe('POST');
+    expect(loginRequest.request.body).toEqual(formData);
 
-    // Simular resposta bem-sucedida da API
-    req.flush(mockResponse);
+    const mockTokenResponse = { token: 'mocked-jwt-token' };
+    loginRequest.flush(mockTokenResponse);
 
-    // Validar que o token foi salvo corretamente
-    expect(localStorage.getItem('authToken')).toBe('fake-token');
+    expect(localStorage.getItem('accessToken')).toBe(mockTokenResponse.token);
   });
 
-  it('should handle API errors gracefully', () => {
-    const mockError = { message: 'Invalid credentials' };
+  it('should fetch and save user details after obtaining the token', () => {
+    const mockToken = 'mocked-jwt-token';
+    localStorage.setItem('accessToken', mockToken);
 
-    // Atualizar valores do formulário
-    component.loginForm.setValue({
-      email: 'invalid@email.com',
-      password: 'wrongpassword',
-    });
+    component.obterDadosToken();
 
-    // Simular o envio do formulário
+    const userDetailsRequest = httpMock.expectOne('http://10.1.72.147:80/api-gpl/Api/Login/obter-cookie');
+    expect(userDetailsRequest.request.method).toBe('GET');
+    expect(userDetailsRequest.request.headers.get('Authorization')).toBe(`Bearer ${mockToken}`);
+
+    const mockUserDetails = [
+      { tipo: 'username', valor: '3058880' },
+      { tipo: 'Perfil', valor: '1' },
+      { tipo: 'Unidade', valor: '1' },
+      { tipo: 'nome', valor: 'Luís Guilherme Ribeiro Teixeira' }
+    ];
+
+    userDetailsRequest.flush(mockUserDetails);
+
+    const savedUserDetails = JSON.parse(localStorage.getItem('userDetails') || '[]');
+    expect(savedUserDetails).toEqual(mockUserDetails);
+  });
+
+  it('should handle API errors gracefully during login', () => {
+    const formData = { username: 'testUser', password: 'wrongPassword' };
+
+    component.loginForm.setValue(formData);
     component.onSubmit();
-    const req = httpMock.expectOne('http://10.1.72.147/api-gpl/Api/Login/login');
 
-    // Simular erro na resposta da API
-    req.flush(mockError, { status: 401, statusText: 'Unauthorized' });
+    const loginRequest = httpMock.expectOne('http://10.1.72.147:80/api-gpl/Api/Login/login');
+    loginRequest.flush('Invalid credentials', { status: 401, statusText: 'Unauthorized' });
 
-    // Validar que o erro foi tratado corretamente
-    expect(component.errorMessage).toBe('Invalid credentials');
+    expect(component.errorMessage).toBe('Usuário ou senha inválidos. Tente novamente.');
+    expect(component.showErrorMessage).toBeTrue();
   });
 
-  
+  it('should handle API errors gracefully during user data fetch', () => {
+    const mockToken = 'mocked-jwt-token';
+    localStorage.setItem('accessToken', mockToken);
+
+    component.obterDadosToken();
+
+    const userDetailsRequest = httpMock.expectOne('http://10.1.72.147:80/api-gpl/Api/Login/obter-cookie');
+    userDetailsRequest.flush('Error fetching data', { status: 500, statusText: 'Internal Server Error' });
+
+    expect(component.errorMessage).toBe('Erro ao obter informações do usuário. Tente novamente mais tarde.');
+    expect(component.showErrorMessage).toBeTrue();
+  });
+
+  afterEach(() => {
+    httpMock.verify();
+    localStorage.clear();
+  });
 });
-
-
 
 
