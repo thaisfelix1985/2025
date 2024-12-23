@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  template: `<h1>Bem-vindo ao Sistema GPL!</h1>`,
+  templateUrl: './inicio.component.html',
   styleUrls: ['./inicio.component.css'],
 })
 export class InicioComponent {}
