@@ -69,9 +69,10 @@ export class LoginComponent {
         next: (response: any) => {
           console.log('Login realizado com sucesso!', response);
 
-          // Salva o token diretamente, sem tentar fazer JSON.parse
-          localStorage.setItem('accessToken', response);
-          console.log('Token salvo com sucesso!');
+          // Salva o token no cookie
+          this.saveTokenInCookie(response);
+          console.log('Token salvo no cookie com sucesso!');
+          
           this.obterDadosToken(); // Chama o método para obter os dados do usuário
         },
         error: (error) => {
@@ -86,8 +87,33 @@ export class LoginComponent {
       });
   }
 
+  // Função para salvar o token no cookie
+  saveTokenInCookie(token: string) {
+    const expires = new Date();
+    expires.setSeconds(expires.getSeconds() + 3600); // O cookie vai expirar em 1 hora
+    document.cookie = `accessToken=${token}; expires=${expires.toUTCString()}; path=/; secure; SameSite=Strict`;
+  }
+
+  // Função para pegar o token do cookie
+  getTokenFromCookie() {
+    const name = 'accessToken=';
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return '';
+  }
+
+  // Função para obter os dados do usuário usando o token
   obterDadosToken() {
-    const token = localStorage.getItem('accessToken');
+    const token = this.getTokenFromCookie();
     console.log('Token obtido:', token); // Log para verificar se o token foi salvo corretamente
 
     if (!token) {
@@ -97,7 +123,7 @@ export class LoginComponent {
     }
 
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
 
     console.log('Fazendo requisição para obter dados do usuário com token'); // Log da requisição para obter os dados do usuário
@@ -110,14 +136,13 @@ export class LoginComponent {
           localStorage.setItem('userDetails', JSON.stringify(response));
           console.log('Redirecionando para /inicio...');
           this.router.navigate(['/inicio']);
-          this// Redireciona após obter os dados
         },
         error: (error) => {
           console.error('Erro ao obter informações do usuário:', error);
           this.errorMessage =
             'Erro ao obter informações do usuário. Tente novamente mais tarde.';
           this.showErrorMessage = true;
-        }
+        },
       });
   }
 
@@ -127,6 +152,7 @@ export class LoginComponent {
     this.errorMessage = '';
   }
 }
+
 
 
 

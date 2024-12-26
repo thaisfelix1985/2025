@@ -1,18 +1,20 @@
-<div class="wrapper">
-    <!-- Sidebar -->
-    <div class="sidebar-wrapper" data-simplebar="true">
-      <div class="sidebar-header d-flex justify-content-between align-items-center">
-        <div class="d-flex align-items-center">
-          
-          <div>
-            <h4 class="logo-text">Sistema GPL</h4>
-          </div>
-        </div>
-        <!-- Setinha de saída -->
-        <div class="toggle-icon ms-auto">
-          <i class="bx bx-arrow-to-left"></i>
+<div class="container">
+  <!-- Sidebar -->
+   <div class="sidebar-wrapper" data-simplebar="true">
+     <div class="sidebar-header d-flex justify-content-between align-items-center">
+       <div class="d-flex align-items-center">
+         <div>
+           <img src="https://images.seeklogo.com/logo-png/52/2/prefeitura-do-rio-logo-png_seeklogo-528309.png?v=638686484270000000"  class="logo-img" alt="logo" />
+         </div>
+        <div>
+          <h4 class="logo-text">Sistema GPL</h4>
         </div>
       </div>
+      <!-- Setinha de saída -->
+      <div class="toggle-icon ms-auto">
+        <i class="bx bx-arrow-to-left"></i>
+      </div>
+    </div>
   
       <!-- Menu -->
       <ul class="metismenu" id="menu">
@@ -25,8 +27,62 @@
         </li>
   
         <li class="menu-label">Acessos</li>
-  
-          
+
+      <!-- Processos (com submenu) -->      
+        <a class="d-flex align-items-center" href="javascript:;">
+          <i class="bx bx-file me-2"></i>
+          <div class="menu-title">Processos</div>
+          <i class="bx bx-chevron-down ms-auto"></i>
+        </a>       
+          <li>
+            <a routerLink="/tela-fr" class="d-flex align-items-center">
+              <i class="bx bx-right-arrow-alt me-2"></i>
+              Novo Processo
+            </a>
+          </li>
+          <li>
+            <a routerLink="/em-analise" class="d-flex align-items-center">
+              <i class="bx bx-right-arrow-alt me-2"></i>
+              Em Análise
+            </a>
+          </li>
+          <li>
+            <a routerLink="/concluidos" class="d-flex align-items-center">
+              <i class="bx bx-right-arrow-alt me-2"></i>
+              Concluídos
+            </a>
+          </li>
+        </ul>
+        
+        <!-- Fornecedores (com submenu) -->
+      <li class="has-arrow">
+        <a class="d-flex align-items-center" href="javascript:;">
+          <i class="bx bx-group me-2"></i>
+          <div class="menu-title">Fornecedores</div>
+          <i class="bx bx-chevron-down ms-auto"></i>
+        </a>
+        <ul class="metismenu">
+          <li>
+            <a routerLink="/tela-fr" class="d-flex align-items-center">
+              <i class="bx bx-right-arrow-alt me-2"></i>
+              Cadastrar novo
+            </a>
+          </li>
+          <li>
+            <a routerLink="/ativos-fornecedores" class="d-flex align-items-center">
+              <i class="bx bx-right-arrow-alt me-2"></i>
+              Ativos
+            </a>
+          </li>
+          <li>
+            <a routerLink="/inativos-fornecedores" class="d-flex align-items-center">
+              <i class="bx bx-right-arrow-alt me-2"></i>
+              Inativos
+            </a>
+          </li>
+        </ul>
+      </li>
+            
         <!-- Usuários -->
         <li>
           <a routerLink="/usuarios" class="d-flex align-items-center">
@@ -65,8 +121,7 @@
             <i class="bx bx-user me-2"></i>
             <div class="menu-title">Tela Multa</div>
           </a>
-        </li>
-      </ul>
+        </li>      
     </div>
 
-    <h1>Bem-vindo à página inicial!, Jorge!</h1>
+    <h1>Bem-vindo à página inicial!</h1>
