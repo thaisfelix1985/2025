@@ -5,12 +5,12 @@ import { Router } from '@angular/router';
 import { UserService } from '../user.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';  // Importando o HttpClientModule
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],  // Incluindo o HttpClientModule
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],  
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   providers: [UserService],
@@ -20,7 +20,7 @@ export class LoginComponent {
   showErrorMessage: boolean = false;
   isSubmitting: boolean = false;
   errorMessage: string = '';
-  username: string = ''; // Variável para armazenar o nome do usuário
+  username: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -130,20 +130,22 @@ export class LoginComponent {
             const nomeItem = response.find(item => item.tipo === 'nome');
 
             if (nomeItem && nomeItem.valor) {
-              // Adiciona o nome do usuário no UserService e no localStorage
+              // Atualiza o nome do usuário no UserService
               console.log('Nome do usuário encontrado:', nomeItem.valor);
               this.userService.setUserName(nomeItem.valor);
 
               // Armazena o nome no localStorage para persistência
               localStorage.setItem('userName', nomeItem.valor);
               console.log('Nome atualizado no UserService:', nomeItem.valor);
+
+              // Força a detecção de mudanças (evitando que a navegação ocorra antes de atualizar o nome)
+              setTimeout(() => {
+                this.router.navigate(['/inicio']);
+              }, 0);
             } else {
               console.error('Nome do usuário não encontrado no array:', response);
             }
           }
-
-          // Navega para a página inicial após a atualização
-          this.router.navigate(['/inicio']);
         },
         error: (error) => {
           console.error('Erro ao obter informações do usuário:', error);
@@ -159,6 +161,9 @@ export class LoginComponent {
     this.errorMessage = '';
   }
 }
+
+
+
 
 
 

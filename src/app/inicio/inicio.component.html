@@ -6,34 +6,36 @@
          <div>
            <img src="https://images.seeklogo.com/logo-png/52/2/prefeitura-do-rio-logo-png_seeklogo-528309.png?v=638686484270000000"  class="logo-img" alt="logo" />
          </div>
-        <div>
-          <h4 class="logo-text">Sistema GPL</h4>
-        </div>
-      </div>
-      <!-- Setinha de saída -->
-      <div class="toggle-icon ms-auto">
-        <i class="bx bx-arrow-to-left"></i>
-      </div>
-    </div>
-  
-      <!-- Menu -->
-      <ul class="metismenu" id="menu">
-        <!-- Página Inicial -->
-        <li>
-          <a routerLink="/" class="d-flex align-items-center">
-            <i class="bx bx-home me-2"></i>
-            <div class="menu-title">Página Inicial</div>
-          </a>
-        </li>
-  
-        <li class="menu-label">Acessos</li>
+         <div>
+           <h4 class="logo-text">Sistema GPL</h4>
+         </div>
+       </div>
+       <!-- Setinha de saída -->
+       <div class="toggle-icon ms-auto">
+         <i class="bx bx-arrow-to-left"></i>
+       </div>
+     </div>
 
-      <!-- Processos (com submenu) -->      
+    <!-- Menu -->
+    <ul class="metismenu" id="menu">
+      <!-- Página Inicial -->
+      <li>
+        <a routerLink="/" class="d-flex align-items-center">
+          <i class="bx bx-home me-2"></i>
+          <div class="menu-title">Página Inicial</div>
+        </a>
+      </li>
+
+      <li class="menu-label">Acessos</li>
+
+      <!-- Processos (com submenu) -->
+      <li class="has-arrow" [class.open]="isProcessosSubMenuVisible" (click)="toggleProcessosSubMenu()">
         <a class="d-flex align-items-center" href="javascript:;">
           <i class="bx bx-file me-2"></i>
           <div class="menu-title">Processos</div>
           <i class="bx bx-chevron-down ms-auto"></i>
-        </a>       
+        </a>
+        <ul class="metismenu" *ngIf="isProcessosSubMenuVisible">
           <li>
             <a routerLink="/tela-fr" class="d-flex align-items-center">
               <i class="bx bx-right-arrow-alt me-2"></i>
@@ -53,15 +55,16 @@
             </a>
           </li>
         </ul>
-        
-        <!-- Fornecedores (com submenu) -->
-      <li class="has-arrow">
+      </li>
+
+      <!-- Fornecedores (com submenu) -->
+      <li class="has-arrow" [class.open]="isFornecedoresSubMenuVisible" (click)="toggleFornecedoresSubMenu()">
         <a class="d-flex align-items-center" href="javascript:;">
           <i class="bx bx-group me-2"></i>
           <div class="menu-title">Fornecedores</div>
           <i class="bx bx-chevron-down ms-auto"></i>
         </a>
-        <ul class="metismenu">
+        <ul class="metismenu" *ngIf="isFornecedoresSubMenuVisible">
           <li>
             <a routerLink="/tela-fr" class="d-flex align-items-center">
               <i class="bx bx-right-arrow-alt me-2"></i>
@@ -82,8 +85,8 @@
           </li>
         </ul>
       </li>
-            
-        <!-- Usuários -->
+
+      <!-- Usuários -->
       <li>
         <a routerLink="/usuarios" class="d-flex align-items-center">
           <i class="bx bx-lock me-2"></i>
@@ -128,7 +131,8 @@
           <i class="bx bx-user me-2"></i>
           <div class="menu-title">Tela Multa</div>
         </a>
-      </li>    
+      </li>
+    </ul>
   </div>
 
     <h1>Bem-vindo à página inicial!</h1>
