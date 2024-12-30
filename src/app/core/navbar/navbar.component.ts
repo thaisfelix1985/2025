@@ -1,4 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
 import { UserService } from '../../user.service';
 
 @Component({
@@ -6,29 +8,19 @@ import { UserService } from '../../user.service';
   standalone: true,
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
+  imports: [CommonModule]
 })
 export class NavbarComponent implements OnInit {
-  userName: string = '';  // Variável para armazenar o nome do usuário
+  userName$: Observable<string>;  // Tornar userName um Observable diretamente
 
-  constructor(
-    private userService: UserService,
-    private cdr: ChangeDetectorRef,  // Injeção do ChangeDetectorRef
-    private ngZone: NgZone  // Injeção do NgZone
-  ) {}
+  constructor(private userService: UserService) {
+    // Inicia a inscrição diretamente no Observable
+    this.userName$ = this.userService.userName$;
+  }
 
-  ngOnInit(): void {
-    // Inscreve-se para observar as mudanças no nome do usuário
-    this.userService.userName$.subscribe((name) => {
-      this.userName = name;  // Atualiza o nome do usuário quando ele mudar
-
-      // Força a detecção de mudanças dentro do contexto do Angular
-      this.ngZone.run(() => {
-        // Chama detectChanges para forçar a atualização da UI
-        this.cdr.detectChanges();
-      });
-
-      // Verifique no console se o nome está sendo corretamente atualizado
-      console.log('Nome do usuário atualizado no Navbar:', this.userName);
+  ngOnInit() {
+    this.userName$.subscribe(name => {
+      console.log('Nome do usuário atualizado no navbar:', name);
     });
   }
 }

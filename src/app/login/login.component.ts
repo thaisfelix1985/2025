@@ -84,13 +84,16 @@ export class LoginComponent {
       });
   }
 
+  // Salva o token nos cookies
   saveTokenInCookie(token: string) {
     const expires = new Date();
     expires.setSeconds(expires.getSeconds() + 3600);  // O cookie vai expirar em 1 hora
     document.cookie = `accessToken=${token}; expires=${expires.toUTCString()}; path=/; secure; SameSite=Strict`;
+    console.log('Token salvo no cookie');
   }
 
-  getTokenFromCookie() {
+  // Recupera o token dos cookies
+  getTokenFromCookie(): string {
     const name = 'accessToken=';
     const decodedCookie = decodeURIComponent(document.cookie);
     const ca = decodedCookie.split(';');
@@ -99,13 +102,14 @@ export class LoginComponent {
       while (c.charAt(0) == ' ') {
         c = c.substring(1);
       }
-      if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length);
+      if (c.indexOf(name) === 0) {
+        return c.substring(name.length, c.length);  // Retorna o token encontrado
       }
     }
-    return '';
+    return '';  // Se não encontrar o token, retorna uma string vazia
   }
 
+  // Obtém os dados do token e atualiza o nome do usuário
   obterDadosToken() {
     const token = this.getTokenFromCookie();
     console.log('Token obtido:', token);
@@ -133,15 +137,20 @@ export class LoginComponent {
               // Atualiza o nome do usuário no UserService
               console.log('Nome do usuário encontrado:', nomeItem.valor);
               this.userService.setUserName(nomeItem.valor);
+              console.log("Nome do usuário após login:", nomeItem.valor);
 
               // Armazena o nome no localStorage para persistência
               localStorage.setItem('userName', nomeItem.valor);
               console.log('Nome atualizado no UserService:', nomeItem.valor);
 
-              // Força a detecção de mudanças (evitando que a navegação ocorra antes de atualizar o nome)
-              setTimeout(() => {
-                this.router.navigate(['/inicio']);
-              }, 0);
+              // Agora, nos inscrevemos no UserService para garantir que a navegação ocorra após o nome ser atualizado.
+              this.userService.userName$.subscribe(name => {
+                if (name) {
+                  console.log('Nome atualizado:', name);
+                  // Navega para a página de início após a atualização do nome
+                  this.router.navigate(['/inicio']);
+                }
+              });
             } else {
               console.error('Nome do usuário não encontrado no array:', response);
             }
@@ -161,6 +170,7 @@ export class LoginComponent {
     this.errorMessage = '';
   }
 }
+
 
 
 
