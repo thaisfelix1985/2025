@@ -6,8 +6,8 @@ import { InicioComponent } from './inicio/inicio.component';
 
 export const routes: Routes = [
   { path: 'inicio', component: InicioComponent },
-  { path: 'login', component: LoginComponent },
-  { path: '', component: HomeComponent },
+  { path: '', component: LoginComponent },
+  { path: 'home', component: HomeComponent },
   { path: 'tela-fr', component: TelaFrComponent },  
   // Defina outras rotas conforme necessário
 ];
