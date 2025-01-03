@@ -1,0 +1,8 @@
+.navbar {
+    position: fixed; /* Fixa o navbar no topo */
+    top: 0; /* Alinha no topo */
+    right: 0; /* Alinha à esquerda */
+    width: 100%; /* O navbar ocupa toda a largura da página */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra opcional para destaque */
+  }
+  

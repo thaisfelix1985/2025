@@ -1,19 +1,87 @@
-.sidebar {
-  width: 100%;
+/* Menu lateral fixo */
+.sidebar-wrapper {
   position: fixed;
   top: 0;
   left: 0;
-  height: 100%;
-  background-color: #f8f9fa; /* Cor clara padrão */
+  height: 100vh; /* Preenche toda a altura da tela */
+  width: 250px; /* Largura do menu lateral */
+  background-color: #333; /* Cor de fundo do menu */
+  color: white;
+  z-index: 1000;
+  padding-top: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  overflow-y: auto; /* Para rolagem */
 }
 
-.nav-link {
-  font-size: 16px;
-  color: #333;
+/* Estilo do cabeçalho da sidebar */
+.sidebar-header {
+  padding: 10px 20px;
+  background-color: #444;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.nav-link.active {
-  font-weight: bold;
-  color: #007bff;
+.sidebar-header .toggle-icon {
+  cursor: pointer;
+}
+
+/* Logo (com a classe .logo-img ou .logo-icon) */
+.logo-img {
+  width: 40px;         /* Ajuste o tamanho conforme necessário */
+  height: 40px;        /* Ajuste o tamanho conforme necessário */
+  margin-right: 10px;  /* Espaçamento entre a logo e o título */
+  object-fit: contain; /* Garante que a imagem não distorça */
+}
+/* Estilo do menu */
+.metismenu {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.metismenu li {
+  padding: 10px;
+}
+
+.metismenu li a {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  padding: 8px 15px;
+}
+
+.metismenu li a:hover {
+  background-color: #555;
+}
+
+/* Estilo do submenu */
+.metismenu ul {
+  list-style-type: none;
+  padding-left: 20px;
+  display: none;
+}
+
+.metismenu li.open > ul {
+  display: block;
+}
+
+/* Conteúdo principal ao lado da sidebar */
+.content-area {
+  margin-left: 250px; /* Espaço para o menu lateral */
+  padding: 20px;
+  background-color: #6c757d; /* Cor de fundo para o conteúdo */
+  min-height: 100vh; /* Garante que o conteúdo ocupe toda a altura */
+}
+li a {
+  text-decoration: none; /* Remove o sublinhado */
+  color: #333; /* Cor padrão */
+  transition: background-color 0.3s, color 0.3s; /* Animação suave */
+}
+
+li a:hover {
+  background-color: #007bff; /* Fundo ao passar o mouse */
+  color: #fff; /* Texto ao passar o mouse */
 }

@@ -82,19 +82,6 @@ export class HomeComponent {
     (this.formulario.get('listEmpenho') as FormArray).push(this.criarEmpenho());
   }
 
-// Variáveis para controlar a visibilidade dos submenus
-isProcessosSubMenuVisible: boolean = false;
-isFornecedoresSubMenuVisible: boolean = false;
-  // Funções para alternar a visibilidade dos submenus
-  toggleProcessosSubMenu() {
-    this.isProcessosSubMenuVisible = !this.isProcessosSubMenuVisible;
-  }
-
-  toggleFornecedoresSubMenu() {
-    this.isFornecedoresSubMenuVisible = !this.isFornecedoresSubMenuVisible;
-  }
-
-
    // Função para alternar entre abrir e fechar os campos NE2
   toggleFields(): void {
     this.fieldsVisible = !this.fieldsVisible; // Alterna entre true e false

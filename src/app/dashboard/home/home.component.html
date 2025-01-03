@@ -1,184 +1,35 @@
 <div class="container">
- <!-- Sidebar -->
-  <div class="sidebar-wrapper" data-simplebar="true">
-    <div class="sidebar-header d-flex justify-content-between align-items-center">
-      <div class="d-flex align-items-center">
-        <div>
-          <img src="app/tela-fr/icon.sms.png" class="logo-icon" alt="logo icon" />
-        </div>
-        <div>
-          <h4 class="logo-text">Sistema GPL</h4>
-        </div>
-      </div>
-      <!-- Setinha de saída -->
-      <div class="toggle-icon ms-auto">
-        <i class="bx bx-arrow-to-left"></i>
-      </div>
-    </div>
 
-    <!-- Menu -->
-    <ul class="metismenu" id="menu">
-      <!-- Página Inicial -->
-      <li>
-        <a routerLink="/inicio" class="d-flex align-items-center">
-          <i class="bx bx-home me-2"></i>
-          <div class="menu-title">Página Inicial</div>
-        </a>
-      </li>
-
-      <li class="menu-label">Acessos</li>
-
-      <!-- Processos (com submenu) -->
-      <li class="has-arrow" [class.open]="isProcessosSubMenuVisible" (click)="toggleProcessosSubMenu()">
-        <a class="d-flex align-items-center" href="javascript:;">
-          <i class="bx bx-file me-2"></i>
-          <div class="menu-title">Processos</div>
-          <i class="bx bx-chevron-down ms-auto"></i>
-        </a>
-        <ul class="metismenu" *ngIf="isProcessosSubMenuVisible">
-          <li>
-            <a routerLink="/home" class="d-flex align-items-center">
-              <i class="bx bx-right-arrow-alt me-2"></i>
-              Novo Processo
-            </a>
-          </li>
-          <li>
-            <a routerLink="/em-analise" class="d-flex align-items-center">
-              <i class="bx bx-right-arrow-alt me-2"></i>
-              Em Análise
-            </a>
-          </li>
-          <li>
-            <a routerLink="/concluidos" class="d-flex align-items-center">
-              <i class="bx bx-right-arrow-alt me-2"></i>
-              Concluídos
-            </a>
-          </li>
-        </ul>
-      </li>
-
-      <!-- Fornecedores (com submenu) -->
-      <li class="has-arrow" [class.open]="isFornecedoresSubMenuVisible" (click)="toggleFornecedoresSubMenu()">
-        <a class="d-flex align-items-center" href="javascript:;">
-          <i class="bx bx-group me-2"></i>
-          <div class="menu-title">Fornecedores</div>
-          <i class="bx bx-chevron-down ms-auto"></i>
-        </a>
-        <ul class="metismenu" *ngIf="isFornecedoresSubMenuVisible">
-          <li>
-            <a routerLink="/tela-fr" class="d-flex align-items-center">
-              <i class="bx bx-right-arrow-alt me-2"></i>
-              Cadastrar novo
-            </a>
-          </li>
-          <li>
-            <a routerLink="/ativos-fornecedores" class="d-flex align-items-center">
-              <i class="bx bx-right-arrow-alt me-2"></i>
-              Ativos
-            </a>
-          </li>
-          <li>
-            <a routerLink="/inativos-fornecedores" class="d-flex align-items-center">
-              <i class="bx bx-right-arrow-alt me-2"></i>
-              Inativos
-            </a>
-          </li>
-        </ul>
-      </li>
-
-      <!-- Usuários -->
-      <li>
-        <a routerLink="/usuarios" class="d-flex align-items-center">
-          <i class="bx bx-lock me-2"></i>
-          <div class="menu-title">Usuários</div>
-        </a>
-      </li>
-
-      <!-- Permissões -->
-      <li>
-        <a routerLink="/permissoes" class="d-flex align-items-center">
-          <i class="bx bx-shield-quarter me-2"></i>
-          <div class="menu-title">Permissões</div>
-        </a>
-      </li>
-
-      <!-- Tela FR -->
-      <li>
-        <a routerLink="/tela-fr" class="d-flex align-items-center">
-          <i class="bx bx-file me-2"></i>
-          <div class="menu-title">Tela FR</div>
-        </a>
-      </li>
-
-      <!-- Autorizador -->
-      <li>
-        <a routerLink="/autorizador" class="d-flex align-items-center">
-          <i class="bx bx-check-circle me-2"></i>
-          <div class="menu-title">Autorizador</div>
-        </a>
-      </li>
-
-      <!-- Analista GPL -->
-      <li>
-        <a routerLink="/analista-gpl" class="d-flex align-items-center">
-          <i class="bx bx-user me-2"></i>
-          <div class="menu-title">Analista GPL</div>
-        </a>
-      </li>
-
-      <!-- Tela Multa -->
-      <li>
-        <a routerLink="/tela-multa" class="d-flex align-items-center">
-          <i class="bx bx-user me-2"></i>
-          <div class="menu-title">Tela Multa</div>
-        </a>
-      </li>
-    </ul>
+  <!-- Mensagem de erro -->
+  <div *ngIf="formulario.invalid && formulario.touched" class="alert alert-danger">
+    <strong>Atenção!</strong> Por favor, preencha todos os campos obrigatórios.
   </div>
-
-    <!-- Mensagem de erro -->
-    <div *ngIf="formulario.invalid && formulario.touched" class="alert alert-danger">
-      <strong>Atenção!</strong> Por favor, preencha todos os campos obrigatórios.
-    </div>
 
   <form [formGroup]="formulario" (ngSubmit)="onSubmit()">
     <!-- UNIDADE GESTORA -->
-<div class="form-section">
-  <div class="section-title">UNIDADE GESTORA</div>
-  <div class="row">
-    <div class="col-md-4">
-      <label for="inputUG">Código UG</label>
-      <input
-        type="number"
-        class="form-control"
-        formControlName="UG"
-        id="inputUG"
-        placeholder="Código UG"
-        required
-        (blur)="buscarUG()"
-      />
-      <div *ngIf="formulario.get('UG')?.invalid && formulario.get('UG')?.touched" class="text-danger">
-        Código UG é obrigatório.
-      </div>
-    </div>
+    <div class="form-section">
+      <div class="section-title">UNIDADE GESTORA</div>
+      <div class="row">
+        <div class="col-md-4">
+          <label for="inputUG">Código UG</label>
+          <input type="number" class="form-control" formControlName="UG" id="inputUG" placeholder="Código UG" required
+            (blur)="buscarUG()" />
+          <div *ngIf="formulario.get('UG')?.invalid && formulario.get('UG')?.touched" class="text-danger">
+            Código UG é obrigatório.
+          </div>
+        </div>
 
-    <div class="col-md-8">
-      <label for="inputNomeUG">Nome da U.G</label>
-      <input
-        type="text"
-        class="form-control"
-        formControlName="NomeUnidade"
-        id="inputNomeUG"
-        placeholder="Nome da Unidade"
-        required
-        [readonly]="formulario.get('NomeUnidade')?.disabled"
-      />
-      <div *ngIf="formulario.get('NomeUnidade')?.invalid && formulario.get('NomeUnidade')?.touched" class="text-danger">
-        Nome da U.G é obrigatório.
+        <div class="col-md-8">
+          <label for="inputNomeUG">Nome da U.G</label>
+          <input type="text" class="form-control" formControlName="NomeUnidade" id="inputNomeUG"
+            placeholder="Nome da Unidade" required [readonly]="formulario.get('NomeUnidade')?.disabled" />
+          <div *ngIf="formulario.get('NomeUnidade')?.invalid && formulario.get('NomeUnidade')?.touched"
+            class="text-danger">
+            Nome da U.G é obrigatório.
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
     <!-- NÚMERO DO PROCESSO -->
     <div class="form-section">
@@ -186,59 +37,48 @@
       <div class="row">
         <div class="col-md-6">
           <label for="inputNumProcesso">Número do processo de pagamento</label>
-          <input type="text" class="form-control" formControlName="NumeroProcessoRio" id="inputNumProcesso" placeholder="SMSPROXXXX-XXXXXX" required>
-          <div *ngIf="formulario.get('NumeroProcessoRio')?.invalid && formulario.get('NumeroProcessoRio')?.touched" class="text-danger">
+          <input type="text" class="form-control" formControlName="NumeroProcessoRio" id="inputNumProcesso"
+            placeholder="SMSPROXXXX-XXXXXX" required>
+          <div *ngIf="formulario.get('NumeroProcessoRio')?.invalid && formulario.get('NumeroProcessoRio')?.touched"
+            class="text-danger">
             Número do processo é obrigatório.
           </div>
         </div>
         <div class="col-md-6">
           <label for="inputDataAbertura">Data de abertura do Processo Rio</label>
           <input type="date" class="form-control" formControlName="DataEmissao" id="inputDataAbertura" required>
-          <div *ngIf="formulario.get('DataEmissao')?.invalid && formulario.get('DataEmissao')?.touched" class="text-danger">
+          <div *ngIf="formulario.get('DataEmissao')?.invalid && formulario.get('DataEmissao')?.touched"
+            class="text-danger">
             Data de abertura é obrigatória.
           </div>
         </div>
       </div>
     </div>
 
-   <!-- CNPJ -->
-<div class="form-section">
-  <div class="section-title">EMPRESA</div>
-  <div class="row">
-    <div class="col-md-6">
-      <label for="inputCNPJ">CNPJ</label>
-      <input
-        type="text"
-        class="form-control"
-        formControlName="CNPJ"
-        id="inputCNPJ"
-        placeholder="00.000.000/0001-00"
-        required
-        (blur)="buscarCnpj()"
-        pattern="^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$"
-      />
-      <div *ngIf="formulario.get('CNPJ')?.invalid && formulario.get('CNPJ')?.touched" class="text-danger">
-        CNPJ é obrigatório e deve estar no formato correto (00.000.000/0001-00).
-      </div>
-    </div>
+    <!-- CNPJ -->
+    <div class="form-section">
+      <div class="section-title">EMPRESA</div>
+      <div class="row">
+        <div class="col-md-6">
+          <label for="inputCNPJ">CNPJ</label>
+          <input type="text" class="form-control" formControlName="CNPJ" id="inputCNPJ" placeholder="00.000.000/0001-00"
+            required (blur)="buscarCnpj()" pattern="^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$" />
+          <div *ngIf="formulario.get('CNPJ')?.invalid && formulario.get('CNPJ')?.touched" class="text-danger">
+            CNPJ é obrigatório e deve estar no formato correto (00.000.000/0001-00).
+          </div>
+        </div>
 
-    <div class="col-md-6">
-      <label for="inputRazaoSocial">Razão Social</label>
-      <input
-        type="text"
-        class="form-control"
-        formControlName="RazaoSocial"
-        id="inputRazaoSocial"
-        placeholder="Razão Social da Empresa"
-        required
-        [readonly]="formulario.get('RazaoSocial')?.disabled"
-      />
-      <div *ngIf="formulario.get('RazaoSocial')?.invalid && formulario.get('RazaoSocial')?.touched" class="text-danger">
-        Razão Social é obrigatória.
+        <div class="col-md-6">
+          <label for="inputRazaoSocial">Razão Social</label>
+          <input type="text" class="form-control" formControlName="RazaoSocial" id="inputRazaoSocial"
+            placeholder="Razão Social da Empresa" required [readonly]="formulario.get('RazaoSocial')?.disabled" />
+          <div *ngIf="formulario.get('RazaoSocial')?.invalid && formulario.get('RazaoSocial')?.touched"
+            class="text-danger">
+            Razão Social é obrigatória.
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
 
     <!-- NOTA FISCAL -->
@@ -247,22 +87,27 @@
       <div class="row">
         <div class="col-md-4">
           <label for="inputNrNotaFiscal">Número da NF</label>
-          <input type="text" class="form-control" formControlName="NrNotaFiscal" id="inputNrNotaFiscal" placeholder="Número da Nota Fiscal" required>
-          <div *ngIf="formulario.get('NrNotaFiscal')?.invalid && formulario.get('NrNotaFiscal')?.touched" class="text-danger">
+          <input type="text" class="form-control" formControlName="NrNotaFiscal" id="inputNrNotaFiscal"
+            placeholder="Número da Nota Fiscal" required>
+          <div *ngIf="formulario.get('NrNotaFiscal')?.invalid && formulario.get('NrNotaFiscal')?.touched"
+            class="text-danger">
             Número da NF é obrigatório.
           </div>
         </div>
         <div class="col-md-4">
           <label for="inputValorBruto">Valor Bruto</label>
-          <input type="number" class="form-control" formControlName="ValorBruto" id="inputValorBruto" placeholder="R$ 0,00" required>
-          <div *ngIf="formulario.get('ValorBruto')?.invalid && formulario.get('ValorBruto')?.touched" class="text-danger">
+          <input type="number" class="form-control" formControlName="ValorBruto" id="inputValorBruto"
+            placeholder="R$ 0,00" required>
+          <div *ngIf="formulario.get('ValorBruto')?.invalid && formulario.get('ValorBruto')?.touched"
+            class="text-danger">
             Valor Bruto é obrigatório.
           </div>
         </div>
         <div class="col-md-4">
           <label for="inputDataEmissao">Data de Emissão</label>
           <input type="date" class="form-control" formControlName="DataEmissao" id="inputDataEmissao" required>
-          <div *ngIf="formulario.get('DataEmissao')?.invalid && formulario.get('DataEmissao')?.touched" class="text-danger">
+          <div *ngIf="formulario.get('DataEmissao')?.invalid && formulario.get('DataEmissao')?.touched"
+            class="text-danger">
             Data de emissão é obrigatória.
           </div>
         </div>
@@ -275,15 +120,18 @@
       <div class="row">
         <div class="col-md-2">
           <label for="inputCOFINS">COFINS</label>
-          <input type="number" class="form-control" formControlName="COFINS" id="inputCOFINS" placeholder="R$ 00.000" required>
+          <input type="number" class="form-control" formControlName="COFINS" id="inputCOFINS" placeholder="R$ 00.000"
+            required>
         </div>
         <div class="col-md-2">
           <label for="inputCSLL">CSLL</label>
-          <input type="number" class="form-control" formControlName="CSLL" id="inputCSLL" placeholder="R$ 00.000" required>
+          <input type="number" class="form-control" formControlName="CSLL" id="inputCSLL" placeholder="R$ 00.000"
+            required>
         </div>
         <div class="col-md-2">
           <label for="inputISS">ISS</label>
-          <input type="number" class="form-control" formControlName="ISS" id="inputISS" placeholder="R$ 00.000" required>
+          <input type="number" class="form-control" formControlName="ISS" id="inputISS" placeholder="R$ 00.000"
+            required>
         </div>
         <div class="col-md-2">
           <label for="inputIR">IR</label>
@@ -291,11 +139,13 @@
         </div>
         <div class="col-md-2">
           <label for="inputPIS">PIS</label>
-          <input type="number" class="form-control" formControlName="PIS" id="inputPIS" placeholder="R$ 00.000" required>
+          <input type="number" class="form-control" formControlName="PIS" id="inputPIS" placeholder="R$ 00.000"
+            required>
         </div>
         <div class="col-md-2">
           <label for="inputINSS">INSS</label>
-          <input type="number" class="form-control" formControlName="INSS" id="inputINSS" placeholder="R$ 00.000" required>
+          <input type="number" class="form-control" formControlName="INSS" id="inputINSS" placeholder="R$ 00.000"
+            required>
         </div>
       </div>
     </div>
@@ -308,96 +158,101 @@
           <div class="row">
             <div class="col-md-2">
               <label for="inputnNE1">NE {{i + 1}}</label>
-              <input type="text" class="form-control" formControlName="NE" id="inputnNE1" placeholder="2024NEXXXXXX" required>
+              <input type="text" class="form-control" formControlName="NE" id="inputnNE1" placeholder="2024NEXXXXXX"
+                required>
             </div>
             <div class="col-md-2">
               <label for="inputFR">FR</label>
-              <input type="number" class="form-control" formControlName="FR" id="inputFR" placeholder="Detalhamento" required>
+              <input type="number" class="form-control" formControlName="FR" id="inputFR" placeholder="Detalhamento"
+                required>
             </div>
             <div class="col-md-2">
               <label for="inputND">Natureza da despesa</label>
-              <input type="number" class="form-control" formControlName="NaturezaDespesa" id="inputND" placeholder="XXXXXX" required>
+              <input type="number" class="form-control" formControlName="NaturezaDespesa" id="inputND"
+                placeholder="XXXXXX" required>
             </div>
             <div class="col-md-2">
               <label for="inputTP">Tipo patrimonial</label>
-              <input type="number" class="form-control" formControlName="TipoPatrimonial" id="inputTP" placeholder="XX" required>
+              <input type="number" class="form-control" formControlName="TipoPatrimonial" id="inputTP" placeholder="XX"
+                required>
             </div>
             <div class="col-md-2">
               <label for="inputIP">Item patrimonial</label>
-              <input type="number" class="form-control" formControlName="ItemPatrimonial" id="inputIP" placeholder="XXX" required>
+              <input type="number" class="form-control" formControlName="ItemPatrimonial" id="inputIP" placeholder="XXX"
+                required>
             </div>
           </div>
         </div>
       </div>
     </div>
 
- <!-- Botão "+" para alternar a visibilidade dos campos NE2, posicionado ao lado do campo "Item Patrimonial" -->
-<div class="col-md-1">
-  <button type="button" class="btn btn-primary" (click)="toggleFields()">
-    {{ fieldsVisible ? '-' : '+' }}
-  </button>
-</div>
+    <!-- Botão "+" para alternar a visibilidade dos campos NE2, posicionado ao lado do campo "Item Patrimonial" -->
+    <div class="col-md-1">
+      <button type="button" class="btn btn-primary" (click)="toggleFields()">
+        {{ fieldsVisible ? '-' : '+' }}
+      </button>
+    </div>
 
-<!-- Novos campos NE2 (inicialmente escondidos) -->
-<div class="form-section" *ngIf="fieldsVisible">
-  <div class="row mt-3">
-    <div class="col-md-2">
-      <label for="inputNE2">NE 2</label>
-      <input type="text" class="form-control" formControlName="NE2" id="inputNE2" placeholder="2024NEXXXXXX">
-    </div>
-    <div class="col-md-2">
-      <label for="inputFR2">FR</label>
-      <input type="text" class="form-control" formControlName="FR2" id="inputFR2">
-    </div>
-    <div class="col-md-2">
-      <label for="inputNaturezaDespesa2">Natureza da Despesa</label>
-      <input type="text" class="form-control" formControlName="NaturezaDespesa2" id="inputNaturezaDespesa2">
-    </div>
-    <div class="col-md-2">
-      <label for="inputTipoPatrimonial2">Tipo Patrimonial</label>
-      <input type="text" class="form-control" formControlName="TipoPatrimonial2" id="inputTipoPatrimonial2">
-    </div>
-    <div class="col-md-2">
-      <label for="inputItemPatrimonial2">Item Patrimonial</label>
-      <input type="text" class="form-control" formControlName="ItemPatrimonial2" id="inputItemPatrimonial2">
-    </div>
-  </div>
+    <!-- Novos campos NE2 (inicialmente escondidos) -->
+    <div class="form-section" *ngIf="fieldsVisible">
+      <div class="row mt-3">
+        <div class="col-md-2">
+          <label for="inputNE2">NE 2</label>
+          <input type="text" class="form-control" formControlName="NE2" id="inputNE2" placeholder="2024NEXXXXXX">
+        </div>
+        <div class="col-md-2">
+          <label for="inputFR2">FR</label>
+          <input type="text" class="form-control" formControlName="FR2" id="inputFR2">
+        </div>
+        <div class="col-md-2">
+          <label for="inputNaturezaDespesa2">Natureza da Despesa</label>
+          <input type="text" class="form-control" formControlName="NaturezaDespesa2" id="inputNaturezaDespesa2">
+        </div>
+        <div class="col-md-2">
+          <label for="inputTipoPatrimonial2">Tipo Patrimonial</label>
+          <input type="text" class="form-control" formControlName="TipoPatrimonial2" id="inputTipoPatrimonial2">
+        </div>
+        <div class="col-md-2">
+          <label for="inputItemPatrimonial2">Item Patrimonial</label>
+          <input type="text" class="form-control" formControlName="ItemPatrimonial2" id="inputItemPatrimonial2">
+        </div>
+      </div>
 
- <!-- Botão para abrir os campos NE3 (ficará abaixo dos campos NE2) com margem superior -->
-<div class="row mt-5">
-  <div class="col-md-1">
-    <button type="button" class="btn btn-primary" (click)="toggleNe3Fields()">
-      {{ ne3Visible ? '-' : '+' }}
-    </button>
-  </div>
-</div>
+      <!-- Botão para abrir os campos NE3 (ficará abaixo dos campos NE2) com margem superior -->
+      <div class="row mt-5">
+        <div class="col-md-1">
+          <button type="button" class="btn btn-primary" (click)="toggleNe3Fields()">
+            {{ ne3Visible ? '-' : '+' }}
+          </button>
+        </div>
+      </div>
 
-  <!-- Novos campos NE3 (inicialmente escondidos) -->
-  <div class="form-section" *ngIf="ne3Visible">
-    <div class="row mt-3">
-      <div class="col-md-2">
-        <label for="inputNE3">NE 3</label>
-        <input type="text" class="form-control" formControlName="NE3" id="inputNE3" placeholder="2024NEXXXXXX">
-      </div>
-      <div class="col-md-2">
-        <label for="inputFR3">FR</label>
-        <input type="text" class="form-control" formControlName="FR3" id="inputFR3">
-      </div>
-      <div class="col-md-2">
-        <label for="inputNaturezaDespesa3">Natureza da Despesa</label>
-        <input type="text" class="form-control" formControlName="NaturezaDespesa3" id="inputNaturezaDespesa3">
-      </div>
-      <div class="col-md-2">
-        <label for="inputTipoPatrimonial3">Tipo Patrimonial</label>
-        <input type="text" class="form-control" formControlName="TipoPatrimonial3" id="inputTipoPatrimonial3">
-      </div>
-      <div class="col-md-2">
-        <label for="inputItemPatrimonial3">Item Patrimonial</label>
-        <input type="text" class="form-control" formControlName="ItemPatrimonial3" id="inputItemPatrimonial3">
+      <!-- Novos campos NE3 (inicialmente escondidos) -->
+      <div class="form-section" *ngIf="ne3Visible">
+        <div class="row mt-3">
+          <div class="col-md-2">
+            <label for="inputNE3">NE 3</label>
+            <input type="text" class="form-control" formControlName="NE3" id="inputNE3" placeholder="2024NEXXXXXX">
+          </div>
+          <div class="col-md-2">
+            <label for="inputFR3">FR</label>
+            <input type="text" class="form-control" formControlName="FR3" id="inputFR3">
+          </div>
+          <div class="col-md-2">
+            <label for="inputNaturezaDespesa3">Natureza da Despesa</label>
+            <input type="text" class="form-control" formControlName="NaturezaDespesa3" id="inputNaturezaDespesa3">
+          </div>
+          <div class="col-md-2">
+            <label for="inputTipoPatrimonial3">Tipo Patrimonial</label>
+            <input type="text" class="form-control" formControlName="TipoPatrimonial3" id="inputTipoPatrimonial3">
+          </div>
+          <div class="col-md-2">
+            <label for="inputItemPatrimonial3">Item Patrimonial</label>
+            <input type="text" class="form-control" formControlName="ItemPatrimonial3" id="inputItemPatrimonial3">
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
     <!-- BOTÕES PDF E ENVIO PRA API -->
     <div class="text-right mt-3 d-flex justify-content-end" style="gap: 10px;">
@@ -415,7 +270,8 @@
       <div><strong>U.G:</strong> {{ formulario.get('UG')?.value }}</div>
       <div><strong>Nome da U.G:</strong> {{ formulario.get('NomeUnidade')?.value }}</div>
       <div><strong>Nº do processo de pagamento:</strong> {{ formulario.get('NumeroProcessoRio')?.value }}</div>
-      <div><strong>Abertura no Processo Rio:</strong> {{ formulario.get('DataEmissao')?.value | date: 'dd/MM/yyyy' }}</div>
+      <div><strong>Abertura no Processo Rio:</strong> {{ formulario.get('DataEmissao')?.value | date: 'dd/MM/yyyy' }}
+      </div>
       <div><strong>CNPJ:</strong> {{ formulario.get('CNPJ')?.value }}</div>
       <div><strong>Razão Social:</strong> {{ formulario.get('RazaoSocial')?.value }}</div>
       <div><strong>Número da NF:</strong> {{ formulario.get('NrNotaFiscal')?.value }}</div>
@@ -456,8 +312,7 @@
         <div><strong>Tipo Patrimonial:</strong> {{ formulario.get('TipoPatrimonial3')?.value }}</div>
         <div><strong>Item Patrimonial:</strong> {{ formulario.get('ItemPatrimonial3')?.value }}</div>
       </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-primary" (click)="gerarPDF()">Gerar PDF</button>
-      <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Fechar</button>
-    </div>
-
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="gerarPDF()">Gerar PDF</button>
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Fechar</button>
+      </div>

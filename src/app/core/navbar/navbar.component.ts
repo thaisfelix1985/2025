@@ -21,10 +21,15 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    const usuario = localStorage.getItem('userName');
-    if(usuario){
-      this.nome = usuario
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      const nome = localStorage.getItem('userName'); // Acessa apenas no navegador
+      if (nome) {
+        this.nome = nome;
+      } else {
+        console.warn('Nome não encontrado no localStorage.');
+      }
+    } else {
+      console.error('localStorage não está disponível no ambiente atual.');
     }
-    
   }
 }

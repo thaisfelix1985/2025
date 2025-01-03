@@ -30,10 +30,6 @@ export class TelaFrComponent implements OnInit {
     { value: '240', label: '199' }
   ];
 
-  // Variáveis para controlar a visibilidade do submenu
-  isProcessosSubMenuVisible: boolean = false;
-  isFornecedoresSubMenuVisible: boolean = false;
-
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
       selectedFR: ['', Validators.required],  // Campo obrigatório
@@ -46,15 +42,6 @@ export class TelaFrComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  // Método para alternar a visibilidade do submenu de Processos
-  toggleProcessosSubMenu(): void {
-    this.isProcessosSubMenuVisible = !this.isProcessosSubMenuVisible;
-  }
-
-  // Método para alternar a visibilidade do submenu de Fornecedores
-  toggleFornecedoresSubMenu(): void {
-    this.isFornecedoresSubMenuVisible = !this.isFornecedoresSubMenuVisible;
-  }
 
   updateAvailableValue(): void {
     // Atualizar o valor com base na seleção do FR

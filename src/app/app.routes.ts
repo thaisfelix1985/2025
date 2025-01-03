@@ -5,9 +5,14 @@ import { TelaFrComponent } from './tela-fr/tela-fr.component';
 import { InicioComponent } from './inicio/inicio.component';
 
 export const routes: Routes = [
-  { path: 'inicio', component: InicioComponent },
   { path: '', component: LoginComponent },
-  { path: 'home', component: HomeComponent },
-  { path: 'tela-fr', component: TelaFrComponent },  
-  // Defina outras rotas conforme necessário
+
+  { path: 'inicio', component: InicioComponent,
+    children: [
+      { path: 'home', component: HomeComponent },
+      { path: 'tela-fr', component: TelaFrComponent },  
+      // Defina outras rotas conforme necessário
+    ]
+   },
+
 ];

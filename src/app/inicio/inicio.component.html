@@ -1,140 +1,19 @@
-<div class="container">
-  <app-navbar></app-navbar> <!-- Navbar -->
-  <!-- Sidebar -->
-   <div class="sidebar-wrapper" data-simplebar="true">
-     <div class="sidebar-header d-flex justify-content-between align-items-center">
-       <div class="d-flex align-items-center">
-         <div>
-           <img src="https://images.seeklogo.com/logo-png/52/2/prefeitura-do-rio-logo-png_seeklogo-528309.png?v=638686484270000000"  class="logo-img" alt="logo" />
-         </div>
-         <div>
-           <h4 class="logo-text">Sistema GPL</h4>
-         </div>
-       </div>
-       <!-- Setinha de saída -->
-       <div class="toggle-icon ms-auto">
-         <i class="bx bx-arrow-to-left"></i>
-       </div>
-     </div>
+<div class="layout-container">
+  <header class="navbar-container">
+    <app-navbar></app-navbar>
+  </header>
 
-    <!-- Menu -->
-    <ul class="metismenu" id="menu">
-      <!-- Página Inicial -->
-      <li>
-        <a routerLink="/inicio" class="d-flex align-items-center">
-          <i class="bx bx-home me-2"></i>
-          <div class="menu-title">Página Inicial</div>
-        </a>
-      </li>
+  <div class="main-content">
+    <aside class="sidebar-container">
+      <app-sidebar></app-sidebar>
+    </aside>
 
-      <li class="menu-label">Acessos</li>
-
-      <!-- Processos (com submenu) -->
-      <li class="has-arrow" [class.open]="isProcessosSubMenuVisible" (click)="toggleProcessosSubMenu()">
-        <a class="d-flex align-items-center" href="javascript:;">
-          <i class="bx bx-file me-2"></i>
-          <div class="menu-title">Processos</div>
-          <i class="bx bx-chevron-down ms-auto"></i>
-        </a>
-        <ul class="metismenu" *ngIf="isProcessosSubMenuVisible">
-          <li>
-            <a routerLink="/home" class="d-flex align-items-center">
-              <i class="bx bx-right-arrow-alt me-2"></i>
-              Novo Processo
-            </a>
-          </li>
-          <li>
-            <a routerLink="/em-analise" class="d-flex align-items-center">
-              <i class="bx bx-right-arrow-alt me-2"></i>
-              Em Análise
-            </a>
-          </li>
-          <li>
-            <a routerLink="/concluidos" class="d-flex align-items-center">
-              <i class="bx bx-right-arrow-alt me-2"></i>
-              Concluídos
-            </a>
-          </li>
-        </ul>
-      </li>
-
-      <!-- Fornecedores (com submenu) -->
-      <li class="has-arrow" [class.open]="isFornecedoresSubMenuVisible" (click)="toggleFornecedoresSubMenu()">
-        <a class="d-flex align-items-center" href="javascript:;">
-          <i class="bx bx-group me-2"></i>
-          <div class="menu-title">Fornecedores</div>
-          <i class="bx bx-chevron-down ms-auto"></i>
-        </a>
-        <ul class="metismenu" *ngIf="isFornecedoresSubMenuVisible">
-          <li>
-            <a routerLink="/tela-fr" class="d-flex align-items-center">
-              <i class="bx bx-right-arrow-alt me-2"></i>
-              Cadastrar novo
-            </a>
-          </li>
-          <li>
-            <a routerLink="/ativos-fornecedores" class="d-flex align-items-center">
-              <i class="bx bx-right-arrow-alt me-2"></i>
-              Ativos
-            </a>
-          </li>
-          <li>
-            <a routerLink="/inativos-fornecedores" class="d-flex align-items-center">
-              <i class="bx bx-right-arrow-alt me-2"></i>
-              Inativos
-            </a>
-          </li>
-        </ul>
-      </li>
-
-      <!-- Usuários -->
-      <li>
-        <a routerLink="/usuarios" class="d-flex align-items-center">
-          <i class="bx bx-lock me-2"></i>
-          <div class="menu-title">Usuários</div>
-        </a>
-      </li>
-
-      <!-- Permissões -->
-      <li>
-        <a routerLink="/permissoes" class="d-flex align-items-center">
-          <i class="bx bx-shield-quarter me-2"></i>
-          <div class="menu-title">Permissões</div>
-        </a>
-      </li>
-
-      <!-- Tela FR -->
-      <li>
-        <a routerLink="/tela-fr" class="d-flex align-items-center">
-          <i class="bx bx-file me-2"></i>
-          <div class="menu-title">Tela FR</div>
-        </a>
-      </li>
-
-      <!-- Autorizador -->
-      <li>
-        <a routerLink="/autorizador" class="d-flex align-items-center">
-          <i class="bx bx-check-circle me-2"></i>
-          <div class="menu-title">Autorizador</div>
-        </a>
-      </li>
-
-      <!-- Analista GPL -->
-      <li>
-        <a routerLink="/analista-gpl" class="d-flex align-items-center">
-          <i class="bx bx-user me-2"></i>
-          <div class="menu-title">Analista GPL</div>
-        </a>
-      </li>
-      <!-- Tela Multa -->
-      <li>
-        <a routerLink="/tela-multa" class="d-flex align-items-center">
-          <i class="bx bx-user me-2"></i>
-          <div class="menu-title">Tela Multa</div>
-        </a>
-      </li>
-    </ul>
+    <section class="content-container">
+      <router-outlet></router-outlet>
+    </section>
   </div>
 
-    <h1>Bem-vindo à página inicial!</h1>
-    
+  <footer class="footer-container">
+    <app-footer></app-footer>
+  </footer>
+</div>

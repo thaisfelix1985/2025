@@ -157,6 +157,13 @@ select.form-control, input.form-control {
 .user-box a:hover {
   color: #00bcd4;
 }
+.page-wrapper {
+  margin-left: 250px; /* Largura do sidebar */
+  padding: 20px; /* Espaçamento interno */
+  background-color: #f8f9fa; /* Fundo claro para destaque */
+  min-height: 100vh; /* Garante que o conteúdo ocupe toda a altura da tela */
+  overflow: auto; /* Adiciona rolagem caso necessário */
+}
 
 /* Responsividade - ajustando as colunas em telas menores */
 @media (max-width: 768px) {
