@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { NavbarComponent } from '../core/navbar/navbar.component';
 
 @Component({
   selector: 'app-inicio',
   standalone: true,
   templateUrl: './inicio.component.html',
   styleUrls: ['./inicio.component.css'],
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule,NavbarComponent],
 })
 export class InicioComponent {
 

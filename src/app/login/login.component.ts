@@ -148,7 +148,9 @@ export class LoginComponent {
                 if (name) {
                   console.log('Nome atualizado:', name);
                   // Navega para a página de início após a atualização do nome
-                  this.router.navigate(['/inicio']);
+                  setTimeout(() =>{
+                    this.router.navigate(['/inicio']);
+                  }, 3000)
                 }
               });
             } else {

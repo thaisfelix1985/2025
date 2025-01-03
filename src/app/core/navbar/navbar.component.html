@@ -7,11 +7,11 @@
       <ul class="navbar-nav ms-auto">
         <li class="nav-item" *ngIf="userName$ | async as userName">
           <!-- Exibe o nome do usuário, se disponível -->
-          <span class="nav-link text-white">Bem-vindo, {{ userName }}</span>
+          <span class="nav-link text-white">Bem-vindo, {{ nome }}</span>
         </li>
         <li class="nav-item" *ngIf="!(userName$ | async)">
           <!-- Caso o nome do usuário não esteja disponível, exibe "Visitante" -->
-          <span class="nav-link text-white">Bem-vindo, Visitante</span>
+          <span class="nav-link text-white">Bem-vindo, Visitante {{nome}}</span>
         </li>
       </ul>
     </div>
@@ -19,6 +19,8 @@
 </nav>
 
 
+
+<router-outlet></router-outlet>
 
 
 

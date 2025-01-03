@@ -2,16 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../user.service';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
-  imports: [CommonModule]
+  imports: [CommonModule, RouterOutlet]
 })
 export class NavbarComponent implements OnInit {
   userName$: Observable<string>;  // Tornar userName um Observable diretamente
+  nome?: string;
 
   constructor(private userService: UserService) {
     // Inicia a inscrição diretamente no Observable
@@ -19,8 +21,10 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userName$.subscribe(name => {
-      console.log('Nome do usuário atualizado no navbar:', name);
-    });
+    const usuario = localStorage.getItem('userName');
+    if(usuario){
+      this.nome = usuario
+    }
+    
   }
 }
